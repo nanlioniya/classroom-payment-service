@@ -111,3 +111,57 @@ def test_delete_payment_service():
     # 確認服務已被刪除
     response = client.get("/payments/services/TEST004")
     assert response.status_code == 404
+
+def test_update_payment_status():
+    """測試更新支付訂單狀態"""
+    # 先創建一個支付訂單
+    payment_data = {
+        "service_id": "test_service",
+        "amount": 100,
+        "user_id": "test_user",
+        "order_id": "test_order"
+    }
+    create_response = client.post("/payments/create", json=payment_data)
+    payment_id = create_response.json()["payment_id"]
+    
+    # 更新支付狀態
+    update_data = {
+        "status": "completed"
+    }
+    response = client.put(f"/payments/{payment_id}", json=update_data)
+    assert response.status_code == 200
+    assert response.json()["status"] == "completed"
+
+def test_update_payment_not_found():
+    """測試更新不存在的支付訂單"""
+    update_data = {
+        "status": "completed"
+    }
+    response = client.put("/payments/non_existent_id", json=update_data)
+    assert response.status_code == 404
+
+def test_delete_payment():
+    """測試刪除支付訂單"""
+    # 先創建一個支付訂單
+    payment_data = {
+        "service_id": "test_service",
+        "amount": 100,
+        "user_id": "test_user",
+        "order_id": "test_order"
+    }
+    create_response = client.post("/payments/create", json=payment_data)
+    payment_id = create_response.json()["payment_id"]
+    
+    # 刪除支付訂單
+    response = client.delete(f"/payments/{payment_id}")
+    assert response.status_code == 200
+    assert response.json()["message"] == "Payment deleted successfully"
+    
+    # 確認訂單已被刪除
+    get_response = client.get(f"/payments/{payment_id}/status")
+    assert get_response.status_code == 404
+
+def test_delete_payment_not_found():
+    """測試刪除不存在的支付訂單"""
+    response = client.delete("/payments/non_existent_id")
+    assert response.status_code == 404
