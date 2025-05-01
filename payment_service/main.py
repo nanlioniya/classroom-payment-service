@@ -1,12 +1,13 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse 
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import List, Optional
 import uuid
 from datetime import datetime
 import csv
 import os
-from app.logger import log_info, log_error
+from logger_service.main import log_info, log_error, log_warning, log_debug, get_logger
+from mailer_service.main import send_payment_confirmation, send_payment_failed
 
 app = FastAPI()
 
@@ -27,6 +28,7 @@ class PaymentCreate(BaseModel):
     amount: float
     user_id: str
     order_id: str
+    email: Optional[EmailStr] = None
 
 class PaymentStatus(BaseModel):
     payment_id: str
@@ -106,23 +108,7 @@ async def delete_payment_service(service_id: str) -> MessageResponse:
 async def create_payment(payment: PaymentCreate) -> PaymentStatus:
     payment_id = str(uuid.uuid4()) # identify the payment
     log_info(f"Creating new payment with ID: {payment_id}")
-    # new_payment = Payment(
-    #     payment_id=payment_id,
-    #     service_id=payment.service_id,
-    #     amount=payment.amount,
-    #     user_id=payment.user_id,
-    #     order_id=payment.order_id,
-    #     status="pending",
-    #     created_at=datetime.now()
-    # )
-    # payments[payment_id] = new_payment
     
-    # return {
-    #     "payment_id": payment_id,
-    #     "status": "pending",
-    #     "amount": payment.amount,
-    #     "created_at": new_payment.created_at.isoformat()
-    # }
     try:
         new_payment = Payment(
             payment_id=payment_id,
@@ -135,6 +121,15 @@ async def create_payment(payment: PaymentCreate) -> PaymentStatus:
         )
         payments[payment_id] = new_payment
         
+        # Get service name
+        service_name = "Unknown Service"
+        if payment.service_id in payment_services:
+            service_name = payment_services[payment.service_id].name
+        
+        # Send payment confirmation email
+        if hasattr(payment, 'email') and payment.email:
+            send_payment_confirmation(payment.email, payment_id, payment.amount, service_name)
+        
         log_info(f"Payment {payment_id} created successfully")
         return {
             "payment_id": payment_id,
@@ -144,6 +139,11 @@ async def create_payment(payment: PaymentCreate) -> PaymentStatus:
         }
     except Exception as e:
         log_error(f"Error creating payment: {str(e)}")
+        
+        # Send payment failed email
+        if hasattr(payment, 'email') and payment.email:
+            send_payment_failed(payment.email, payment_id, payment.amount, str(e))
+            
         raise HTTPException(status_code=500, detail="Failed to create payment")
 
 @app.get("/payments/{payment_id}/info")

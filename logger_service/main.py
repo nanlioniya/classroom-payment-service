@@ -1,41 +1,49 @@
-import logging
-import os
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse 
+from pydantic import BaseModel, EmailStr
+from typing import List, Optional
+import uuid
 from datetime import datetime
+import csv
+import os
+import logging
 
-# 配置日誌目錄
+# app = FastAPI()
+
+# Configure log directory
 LOG_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'logs')
 os.makedirs(LOG_DIR, exist_ok=True)
 
-# 配置日誌文件名（按日期）
+# Configure log file name (based on date)
 log_file = os.path.join(LOG_DIR, f'payment_service_{datetime.now().strftime("%Y-%m-%d")}.log')
 
-# 配置日誌格式
+# Configure log format
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-# 創建文件處理器
+# Create file handler
 file_handler = logging.FileHandler(log_file)
 file_handler.setFormatter(formatter)
 
-# 創建控制台處理器
+# Create console handler
 console_handler = logging.StreamHandler()
 console_handler.setFormatter(formatter)
 
-# 配置根日誌記錄器
+# Configure root logger
 root_logger = logging.getLogger()
 root_logger.setLevel(logging.INFO)
 root_logger.addHandler(file_handler)
 root_logger.addHandler(console_handler)
 
-# 創建支付服務專用日誌記錄器
+# Create logger for payment service
 payment_logger = logging.getLogger('payment_service')
 
 def get_logger(name=None):
-    """獲取命名日誌記錄器"""
+    """Get named logger"""
     if name:
         return logging.getLogger(name)
     return payment_logger
 
-# 日誌級別快捷函數
+# Shortcut functions for logging levels
 def log_info(message, logger_name=None):
     logger = get_logger(logger_name)
     logger.info(message)
