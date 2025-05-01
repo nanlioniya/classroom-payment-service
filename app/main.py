@@ -6,6 +6,7 @@ import uuid
 from datetime import datetime
 import csv
 import os
+from app.logger import log_info, log_error
 
 app = FastAPI()
 
@@ -104,23 +105,46 @@ async def delete_payment_service(service_id: str) -> MessageResponse:
 @app.post("/payments/create")
 async def create_payment(payment: PaymentCreate) -> PaymentStatus:
     payment_id = str(uuid.uuid4()) # identify the payment
-    new_payment = Payment(
-        payment_id=payment_id,
-        service_id=payment.service_id,
-        amount=payment.amount,
-        user_id=payment.user_id,
-        order_id=payment.order_id,
-        status="pending",
-        created_at=datetime.now()
-    )
-    payments[payment_id] = new_payment
+    log_info(f"Creating new payment with ID: {payment_id}")
+    # new_payment = Payment(
+    #     payment_id=payment_id,
+    #     service_id=payment.service_id,
+    #     amount=payment.amount,
+    #     user_id=payment.user_id,
+    #     order_id=payment.order_id,
+    #     status="pending",
+    #     created_at=datetime.now()
+    # )
+    # payments[payment_id] = new_payment
     
-    return {
-        "payment_id": payment_id,
-        "status": "pending",
-        "amount": payment.amount,
-        "created_at": new_payment.created_at.isoformat()
-    }
+    # return {
+    #     "payment_id": payment_id,
+    #     "status": "pending",
+    #     "amount": payment.amount,
+    #     "created_at": new_payment.created_at.isoformat()
+    # }
+    try:
+        new_payment = Payment(
+            payment_id=payment_id,
+            service_id=payment.service_id,
+            amount=payment.amount,
+            user_id=payment.user_id,
+            order_id=payment.order_id,
+            status="pending",
+            created_at=datetime.now()
+        )
+        payments[payment_id] = new_payment
+        
+        log_info(f"Payment {payment_id} created successfully")
+        return {
+            "payment_id": payment_id,
+            "status": "pending",
+            "amount": payment.amount,
+            "created_at": new_payment.created_at.isoformat()
+        }
+    except Exception as e:
+        log_error(f"Error creating payment: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to create payment")
 
 @app.get("/payments/{payment_id}/info")
 async def get_payment_info(payment_id: str) -> PaymentStatus:

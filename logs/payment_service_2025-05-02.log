@@ -1,0 +1,46 @@
+2025-05-02 02:04:30,243 - httpx - INFO - HTTP Request: GET http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,275 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,292 - httpx - INFO - HTTP Request: GET http://testserver/payments/services/TEST001 "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,316 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,334 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,351 - httpx - INFO - HTTP Request: PUT http://testserver/payments/services/TEST002 "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,369 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,380 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/services/TEST003 "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,389 - httpx - INFO - HTTP Request: GET http://testserver/payments/services/TEST003 "HTTP/1.1 404 Not Found"
+2025-05-02 02:04:30,409 - payment_service - INFO - Creating new payment with ID: 42dc6b43-af94-4e32-8dd9-4ca11dbc71a3
+2025-05-02 02:04:30,410 - payment_service - INFO - Payment 42dc6b43-af94-4e32-8dd9-4ca11dbc71a3 created successfully
+2025-05-02 02:04:30,416 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,430 - payment_service - INFO - Creating new payment with ID: 9b58ba0a-d182-4216-b240-32a7acf0fe35
+2025-05-02 02:04:30,432 - payment_service - INFO - Payment 9b58ba0a-d182-4216-b240-32a7acf0fe35 created successfully
+2025-05-02 02:04:30,437 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,448 - httpx - INFO - HTTP Request: GET http://testserver/payments/9b58ba0a-d182-4216-b240-32a7acf0fe35/info "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,461 - payment_service - INFO - Creating new payment with ID: 9769b14a-ec8b-48ee-acd6-31bf6a978e4d
+2025-05-02 02:04:30,462 - payment_service - INFO - Payment 9769b14a-ec8b-48ee-acd6-31bf6a978e4d created successfully
+2025-05-02 02:04:30,466 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,479 - httpx - INFO - HTTP Request: PUT http://testserver/payments/9769b14a-ec8b-48ee-acd6-31bf6a978e4d "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,490 - httpx - INFO - HTTP Request: PUT http://testserver/payments/non_existent_id "HTTP/1.1 404 Not Found"
+2025-05-02 02:04:30,503 - payment_service - INFO - Creating new payment with ID: 0ee5812c-685b-4b32-8793-c76e16b220b8
+2025-05-02 02:04:30,505 - payment_service - INFO - Payment 0ee5812c-685b-4b32-8793-c76e16b220b8 created successfully
+2025-05-02 02:04:30,510 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,519 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/0ee5812c-685b-4b32-8793-c76e16b220b8 "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,531 - httpx - INFO - HTTP Request: GET http://testserver/payments/0ee5812c-685b-4b32-8793-c76e16b220b8/info "HTTP/1.1 404 Not Found"
+2025-05-02 02:04:30,542 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/non_existent_id "HTTP/1.1 404 Not Found"
+2025-05-02 02:04:30,559 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,576 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,610 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-02 02:04:30,621 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,629 - httpx - INFO - HTTP Request: GET http://testserver/payments/applications/aaaac26c-b907-4b34-95fa-83bbca73cf6a "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,644 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-02 02:04:30,656 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,664 - httpx - INFO - HTTP Request: PUT http://testserver/payments/applications/86270909-db1c-41a7-ac05-9706f117792d/approve "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,674 - httpx - INFO - HTTP Request: GET http://testserver/payments/applications/86270909-db1c-41a7-ac05-9706f117792d "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,690 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-02 02:04:30,700 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,708 - httpx - INFO - HTTP Request: PUT http://testserver/payments/applications/2a0ae02e-baa8-4c14-aaf5-6bd9bc8936c4/reject "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,718 - httpx - INFO - HTTP Request: GET http://testserver/payments/applications/2a0ae02e-baa8-4c14-aaf5-6bd9bc8936c4 "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,734 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,741 - payment_service - INFO - Creating new payment with ID: a473fa1c-46d8-464f-b04f-16fc739e0a6c
+2025-05-02 02:04:30,743 - payment_service - INFO - Payment a473fa1c-46d8-464f-b04f-16fc739e0a6c created successfully
+2025-05-02 02:04:30,747 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,766 - httpx - INFO - HTTP Request: GET http://testserver/payments/a473fa1c-46d8-464f-b04f-16fc739e0a6c/download "HTTP/1.1 200 OK"
+2025-05-02 02:04:30,803 - test_logger - INFO - This is a test log message
