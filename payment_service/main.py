@@ -203,7 +203,7 @@ async def apply_payment(application: PaymentApplication) -> PaymentApplicationRe
     }
 
 @app.get("/payments/applications/{application_id}")
-async def get_application_status(application_id: str) -> PaymentApplicationResponse:
+async def get_application_info(application_id: str) -> PaymentApplicationResponse:
     """Get application status"""
     if application_id not in payment_applications:
         raise HTTPException(status_code=404, detail="Application not found")
@@ -265,7 +265,16 @@ async def download_payment(payment_id: str) -> FileResponse:
         service_name = payment_services[payment.service_id].name
     
     # Create CSV file
-    file_path = f"/tmp/payment_{payment_id}.csv"
+    # Configure CSV directory similar to log directory
+    CSV_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'csv_exports')
+    os.makedirs(CSV_DIR, exist_ok=True)
+    
+    # Create date-based subdirectory for better organization
+    date_dir = os.path.join(CSV_DIR, datetime.now().strftime("%Y-%m-%d"))
+    os.makedirs(date_dir, exist_ok=True)
+    
+    # Create CSV file path
+    file_path = os.path.join(date_dir, f"payment_{payment_id}.csv")
     
     # Ensure directory exists
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -297,3 +306,5 @@ async def download_payment(payment_id: str) -> FileResponse:
         filename=f"payment_{payment_id}.csv",
         media_type="text/csv"
     )
+
+

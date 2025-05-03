@@ -202,3 +202,14 @@ class TestMailerFunctions:
         args, kwargs = mock_send_email.call_args
         assert args[0] == ["customer@example.com"]  # to_emails
         assert "Payment Failed Notification #PAY456" in args[1]  # subject
+
+def test_environment_variables():
+    """Test if environment variables are loaded correctly"""
+    import os
+    print("SMTP_USERNAME:", os.environ.get("SMTP_USERNAME"))
+    print("SMTP_SERVER:", os.environ.get("SMTP_SERVER"))
+    print("SMTP_PORT:", os.environ.get("SMTP_PORT"))
+    
+    assert os.environ.get("SMTP_USERNAME") == "9c8dce622a3f58"
+    assert os.environ.get("SMTP_SERVER") == "sandbox.smtp.mailtrap.io"
+    assert os.environ.get("SMTP_PORT") == "2525"

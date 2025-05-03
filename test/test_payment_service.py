@@ -86,11 +86,20 @@ def test_delete_payment_service():
     
 def test_create_payment():
     """Test creating a new payment order"""
+    service_data = {
+        "service_id": "classroom_standard",
+        "name": "Standard Classroom Plan",
+        "description": "Basic classroom booking service",
+        "base_price": 100.0
+    }
+    client.post("/payments/services", json=service_data)
+
     payment_data = {
         "service_id": "classroom_standard",
         "amount": 100,
         "user_id": "test_user",
-        "order_id": "test_order_123"
+        "order_id": "test_order_123",
+        "email": "test_create_payment@example.com"
     }
     response = client.post("/payments/create", json=payment_data)
     assert response.status_code == 200
@@ -196,8 +205,8 @@ def test_apply_payment():
     
     return response.json()["application_id"]
 
-def test_get_application_status():
-    """Test getting application status"""
+def test_get_application_info():
+    """Test getting application info"""
     application_id = test_apply_payment()
     
     # Get application status
