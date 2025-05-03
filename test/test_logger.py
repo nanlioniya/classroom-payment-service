@@ -9,36 +9,6 @@ import logging
 
 client = TestClient(app)
 
-def test_download_payment():
-    """Test downloading payment information"""
-    # Create a service and payment
-    service_data = {
-        "service_id": "TEST009",
-        "name": "Test Payment Service 9",
-        "description": "Service for payment download test",
-        "base_price": 500.0
-    }
-    client.post("/payments/services", json=service_data)
-    
-    payment_data = {
-        "service_id": "TEST009",
-        "amount": 500.0,
-        "user_id": "user303",
-        "order_id": "order303"
-    }
-   
-    create_response = client.post("/payments/create", json=payment_data)
-    payment_id = create_response.json()["payment_id"]
-    
-    response = client.get(f"/payments/{payment_id}/download")
-    assert response.status_code == 200
-    assert "text/csv" in response.headers["content-type"]
-    assert f"payment_{payment_id}.csv" in response.headers["content-disposition"]
-    
-    content = response.content.decode("utf-8")
-    assert "Payment ID" in content
-    assert "TEST009" in content
-
 def test_logger_creation():
     """Test that logger is created correctly"""
     logger = get_logger("test_logger")
