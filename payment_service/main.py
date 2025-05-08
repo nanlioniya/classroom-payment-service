@@ -1,15 +1,19 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse 
 from pydantic import BaseModel, EmailStr
+from typing import List, Optional, Dict, Any
 from typing import List, Optional
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 import csv
 import os
-from logger_service.main import log_info, log_error, log_warning, log_debug, get_logger
-from mailer_service.main import send_payment_confirmation, send_payment_failed
+import requests
+# from logger_service.main import log_info, log_error, log_warning, log_debug, get_logger
+# from mailer_service.main import send_payment_confirmation, send_payment_failed
 
 app = FastAPI()
+
+EMAIL_SERVICE_URL = os.environ.get("EMAIL_SERVICE_URL", "http://localhost:8001")
 
 # model definition
 class PaymentService(BaseModel):
@@ -44,6 +48,7 @@ class Payment(BaseModel):
     order_id: str
     status: str
     created_at: datetime
+    email: Optional[EmailStr] = None
 
 class PaymentUpdate(BaseModel):
     status: str
@@ -62,10 +67,48 @@ class PaymentApplicationResponse(BaseModel):
     status: str
     created_at: str
 
+class PaymentProcessRequest(BaseModel):
+    transaction_id: Optional[str] = None
+
 # mock database
 payment_services = {}
 payments = {}
 payment_applications = {}
+
+
+
+def send_email(endpoint: str, data: Dict[str, Any]) -> bool:
+    url = f"{EMAIL_SERVICE_URL}/{endpoint}"
+    headers = {"Content-Type": "application/json"}
+    
+    print(f"發送郵件到 {url}")
+    print(f"郵件數據: {data}")
+    
+    try:
+        # 轉換數據為 JSON 字符串，確保格式與 curl 命令相同
+        import json
+        json_data = json.dumps(data)
+        print(f"JSON 數據: {json_data}")
+        
+        # 使用 data 參數而不是 json 參數
+        response = requests.post(
+            url, 
+            data=json_data,  # 使用 data 而不是 json
+            headers=headers, 
+            timeout=30  # 增加超時時間
+        )
+        
+        print(f"響應狀態碼: {response.status_code}")
+        print(f"響應內容: {response.text}")
+        
+        return response.status_code == 200
+    except Exception as e:
+        import traceback
+        print(f"異常: {str(e)}")
+        print(f"堆棧跟踪: {traceback.format_exc()}")
+        return False
+
+
 
 # payment service related nodes
 @app.get("/payments/services")
@@ -107,7 +150,7 @@ async def delete_payment_service(service_id: str) -> MessageResponse:
 @app.post("/payments/create")
 async def create_payment(payment: PaymentCreate) -> PaymentStatus:
     payment_id = str(uuid.uuid4()) # identify the payment
-    log_info(f"Creating new payment with ID: {payment_id}")
+    # log_info(f"Creating new payment with ID: {payment_id}")
     
     try:
         new_payment = Payment(
@@ -117,32 +160,54 @@ async def create_payment(payment: PaymentCreate) -> PaymentStatus:
             user_id=payment.user_id,
             order_id=payment.order_id,
             status="pending",
-            created_at=datetime.now()
+            created_at=datetime.now(),
+            email=payment.email
         )
         payments[payment_id] = new_payment
         
         # Get service name
         service_name = "Unknown Service"
-        if payment.service_id in payment_services:
-            service_name = payment_services[payment.service_id].name
+        if new_payment.service_id in payment_services:
+            service_name = payment_services[new_payment.service_id].name
         
         # Send payment confirmation email
-        if hasattr(payment, 'email') and payment.email:
-            send_payment_confirmation(payment.email, payment_id, payment.amount, service_name)
+        # if hasattr(payment, 'email') and payment.email:
+        #     send_payment_confirmation(payment.email, payment_id, payment.amount, service_name)
         
-        log_info(f"Payment {payment_id} created successfully")
+        if new_payment.email:  # 檢查是否提供了郵箱
+
+            due_date = new_payment.created_at + timedelta(days=30)
+            # 格式化 due_date 為字符串 (例如 "YYYY-MM-DD")
+            due_date_str = due_date.strftime("%Y-%m-%d")
+
+            # 構建符合 PaymentCreatedRequest 的 email_data
+            email_data = {
+                "recipient": new_payment.email,
+                "payment_id": str(payment_id),  # 確保是字符串
+                "service_name": service_name,
+                "amount": float(new_payment.amount),  # 確保是浮點數
+                "due_date": due_date_str  # 確保是字符串
+            }            
+            # 添加調試輸出
+            # print(f"Sending email to {EMAIL_SERVICE_URL}/payment/created")
+            # print(f"Email data: {email_data}")
+            
+            success = send_email("payment/created", email_data)
+            if not success:
+                print("Failed to send email notification")
+
         return {
             "payment_id": payment_id,
             "status": "pending",
-            "amount": payment.amount,
+            "amount": new_payment.amount,
             "created_at": new_payment.created_at.isoformat()
         }
     except Exception as e:
-        log_error(f"Error creating payment: {str(e)}")
+        # log_error(f"Error creating payment: {str(e)}")
         
         # Send payment failed email
-        if hasattr(payment, 'email') and payment.email:
-            send_payment_failed(payment.email, payment_id, payment.amount, str(e))
+        # if hasattr(payment, 'email') and payment.email:
+        #     send_payment_failed(payment.email, payment_id, payment.amount, str(e))
             
         raise HTTPException(status_code=500, detail="Failed to create payment")
 

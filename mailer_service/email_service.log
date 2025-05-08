@@ -1,0 +1,76 @@
+2025-05-08 16:47:56,761 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-08 16:51:57,116 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 16:52:07,137 - email_service - ERROR - Error sending email: [Errno -3] Temporary failure in name resolution
+2025-05-08 16:52:07,147 - email_service - ERROR - Traceback: Traceback (most recent call last):
+  File "/mnt/c/Users/lotus/classroom-payment-service/mailer_service/main.py", line 70, in send_email
+    server = smtplib.SMTP(self.config.smtp_server, self.config.smtp_port, timeout=30)
+  File "/usr/lib/python3.8/smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+  File "/usr/lib/python3.8/smtplib.py", line 339, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+  File "/usr/lib/python3.8/smtplib.py", line 310, in _get_socket
+    return socket.create_connection((host, port), timeout,
+  File "/usr/lib/python3.8/socket.py", line 787, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+  File "/usr/lib/python3.8/socket.py", line 918, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -3] Temporary failure in name resolution
+
+2025-05-08 16:58:34,229 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-08 16:58:46,966 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 16:58:56,980 - email_service - ERROR - Error sending email: [Errno -3] Temporary failure in name resolution
+2025-05-08 16:58:56,985 - email_service - ERROR - Traceback: Traceback (most recent call last):
+  File "/mnt/c/Users/lotus/classroom-payment-service/mailer_service/main.py", line 70, in send_email
+    server = smtplib.SMTP(self.config.smtp_server, self.config.smtp_port, timeout=30)
+  File "/usr/lib/python3.8/smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+  File "/usr/lib/python3.8/smtplib.py", line 339, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+  File "/usr/lib/python3.8/smtplib.py", line 310, in _get_socket
+    return socket.create_connection((host, port), timeout,
+  File "/usr/lib/python3.8/socket.py", line 787, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+  File "/usr/lib/python3.8/socket.py", line 918, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -3] Temporary failure in name resolution
+
+2025-05-08 17:06:52,874 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-08 17:07:03,033 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 17:07:05,878 - email_service - ERROR - Error sending email: Connection unexpectedly closed
+2025-05-08 17:07:05,892 - email_service - ERROR - Traceback: Traceback (most recent call last):
+  File "/mnt/c/Users/lotus/classroom-payment-service/mailer_service/main.py", line 75, in send_email
+    server.login(self.config.smtp_username, self.config.smtp_password)
+  File "/usr/lib/python3.8/smtplib.py", line 732, in login
+    (code, resp) = self.auth(
+  File "/usr/lib/python3.8/smtplib.py", line 635, in auth
+    (code, resp) = self.docmd("AUTH", mechanism + " " + response)
+  File "/usr/lib/python3.8/smtplib.py", line 425, in docmd
+    return self.getreply()
+  File "/usr/lib/python3.8/smtplib.py", line 398, in getreply
+    raise SMTPServerDisconnected("Connection unexpectedly closed")
+smtplib.SMTPServerDisconnected: Connection unexpectedly closed
+
+2025-05-08 17:18:12,560 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-08 17:18:23,796 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 17:18:27,557 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-08 17:19:21,230 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 17:19:24,789 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-08 17:19:49,629 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 17:19:53,256 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-08 17:20:20,980 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 17:20:24,612 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-08 17:20:46,111 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 17:20:49,737 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-08 17:21:11,074 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 17:21:14,619 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-08 17:22:09,888 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-08 17:22:42,222 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-08 17:42:46,879 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-08 17:44:33,296 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 17:44:37,458 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-08 18:25:52,631 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 18:25:56,368 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-08 18:30:23,235 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 18:30:26,852 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-08 18:31:23,520 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 18:31:27,354 - email_service - INFO - Email sent successfully to user@example.com

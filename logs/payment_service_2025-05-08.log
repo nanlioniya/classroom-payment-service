@@ -1,0 +1,65 @@
+2025-05-08 15:50:08,665 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-08 15:50:08,665 - email_service - INFO - Default sender: payment@example.com
+2025-05-08 15:50:08,810 - httpx - INFO - HTTP Request: GET http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-08 15:50:08,821 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-08 15:50:08,826 - httpx - INFO - HTTP Request: GET http://testserver/payments/services/TEST001 "HTTP/1.1 200 OK"
+2025-05-08 15:50:08,835 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-08 15:50:08,844 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-08 15:50:08,851 - httpx - INFO - HTTP Request: PUT http://testserver/payments/services/TEST002 "HTTP/1.1 200 OK"
+2025-05-08 15:50:08,859 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-08 15:50:08,864 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/services/TEST003 "HTTP/1.1 200 OK"
+2025-05-08 15:50:08,868 - httpx - INFO - HTTP Request: GET http://testserver/payments/services/TEST003 "HTTP/1.1 404 Not Found"
+2025-05-08 15:50:08,875 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-08 15:50:08,919 - payment_service - INFO - Creating new payment with ID: 3903ddcb-4fd1-41bc-9e0a-ba593fc98079
+2025-05-08 15:50:08,920 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-08 15:50:19,002 - email_service - ERROR - Error sending email: [Errno -3] Temporary failure in name resolution
+2025-05-08 15:50:20,571 - email_service - ERROR - Traceback: Traceback (most recent call last):
+  File "/mnt/c/Users/lotus/classroom-payment-service/mailer_service/main.py", line 109, in send_email
+    server = smtplib.SMTP(self.config.smtp_server, self.config.smtp_port, timeout=30)
+  File "/usr/lib/python3.8/smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+  File "/usr/lib/python3.8/smtplib.py", line 339, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+  File "/usr/lib/python3.8/smtplib.py", line 310, in _get_socket
+    return socket.create_connection((host, port), timeout,
+  File "/usr/lib/python3.8/socket.py", line 787, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+  File "/usr/lib/python3.8/socket.py", line 918, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -3] Temporary failure in name resolution
+
+2025-05-08 15:50:20,572 - payment_service - INFO - Payment 3903ddcb-4fd1-41bc-9e0a-ba593fc98079 created successfully
+2025-05-08 15:50:20,575 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-08 15:50:20,582 - payment_service - INFO - Creating new payment with ID: 01b5dabd-2ca1-4e8c-a081-18bb32ec2bbf
+2025-05-08 15:50:20,583 - payment_service - INFO - Payment 01b5dabd-2ca1-4e8c-a081-18bb32ec2bbf created successfully
+2025-05-08 15:50:20,585 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-08 15:50:20,592 - httpx - INFO - HTTP Request: GET http://testserver/payments/01b5dabd-2ca1-4e8c-a081-18bb32ec2bbf/info "HTTP/1.1 200 OK"
+2025-05-08 15:50:20,597 - payment_service - INFO - Creating new payment with ID: 99e6b741-7e17-49ff-9c04-e2ba1b1f0ed6
+2025-05-08 15:50:20,644 - payment_service - INFO - Payment 99e6b741-7e17-49ff-9c04-e2ba1b1f0ed6 created successfully
+2025-05-08 15:50:20,646 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-08 15:50:20,651 - httpx - INFO - HTTP Request: PUT http://testserver/payments/99e6b741-7e17-49ff-9c04-e2ba1b1f0ed6 "HTTP/1.1 200 OK"
+2025-05-08 15:50:20,656 - httpx - INFO - HTTP Request: PUT http://testserver/payments/non_existent_id "HTTP/1.1 404 Not Found"
+2025-05-08 15:50:20,661 - payment_service - INFO - Creating new payment with ID: 9b72e083-1a9a-4218-be86-84205071c485
+2025-05-08 15:50:20,740 - payment_service - INFO - Payment 9b72e083-1a9a-4218-be86-84205071c485 created successfully
+2025-05-08 15:50:20,743 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-08 15:50:20,747 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/9b72e083-1a9a-4218-be86-84205071c485 "HTTP/1.1 200 OK"
+2025-05-08 15:50:20,751 - httpx - INFO - HTTP Request: GET http://testserver/payments/9b72e083-1a9a-4218-be86-84205071c485/info "HTTP/1.1 404 Not Found"
+2025-05-08 15:50:20,756 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/non_existent_id "HTTP/1.1 404 Not Found"
+2025-05-08 15:50:20,764 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-08 15:50:20,772 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-08 15:50:21,941 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-08 15:50:21,947 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-08 15:50:21,951 - httpx - INFO - HTTP Request: GET http://testserver/payments/applications/d5b7e748-84d0-4b7f-8758-ecc1d206699b "HTTP/1.1 200 OK"
+2025-05-08 15:50:21,959 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-08 15:50:21,964 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-08 15:50:21,968 - httpx - INFO - HTTP Request: PUT http://testserver/payments/applications/f4fe7b36-9f70-41e3-b671-a1b8d7145ae4/approve "HTTP/1.1 200 OK"
+2025-05-08 15:50:21,973 - httpx - INFO - HTTP Request: GET http://testserver/payments/applications/f4fe7b36-9f70-41e3-b671-a1b8d7145ae4 "HTTP/1.1 200 OK"
+2025-05-08 15:50:21,980 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-08 15:50:21,984 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-08 15:50:21,990 - httpx - INFO - HTTP Request: PUT http://testserver/payments/applications/d3330534-7025-4dfa-b5a9-98d234ea4539/reject "HTTP/1.1 200 OK"
+2025-05-08 15:50:21,993 - httpx - INFO - HTTP Request: GET http://testserver/payments/applications/d3330534-7025-4dfa-b5a9-98d234ea4539 "HTTP/1.1 200 OK"
+2025-05-08 15:50:21,999 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-08 15:50:22,002 - payment_service - INFO - Creating new payment with ID: 5c9dd5ff-857c-4897-b7bb-19217716a02c
+2025-05-08 15:50:22,002 - payment_service - INFO - Payment 5c9dd5ff-857c-4897-b7bb-19217716a02c created successfully
+2025-05-08 15:50:22,005 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-08 15:50:22,059 - httpx - INFO - HTTP Request: GET http://testserver/payments/5c9dd5ff-857c-4897-b7bb-19217716a02c/download "HTTP/1.1 200 OK"

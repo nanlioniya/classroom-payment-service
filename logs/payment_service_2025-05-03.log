@@ -639,3 +639,169 @@ smtplib.SMTPServerDisconnected: Connection unexpectedly closed
 2025-05-03 18:24:24,034 - email_service - INFO - Sending email to: test@example.com
 2025-05-03 18:24:25,021 - email_service - INFO - Closing SMTP connection
 2025-05-03 18:24:25,267 - email_service - INFO - Email sent successfully to test@example.com
+2025-05-03 18:47:36,500 - httpx - INFO - HTTP Request: GET http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:47:36,515 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:47:36,519 - httpx - INFO - HTTP Request: GET http://testserver/payments/services/TEST001 "HTTP/1.1 200 OK"
+2025-05-03 18:47:36,526 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:47:36,537 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:47:36,545 - httpx - INFO - HTTP Request: PUT http://testserver/payments/services/TEST002 "HTTP/1.1 200 OK"
+2025-05-03 18:47:36,553 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:47:36,559 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/services/TEST003 "HTTP/1.1 200 OK"
+2025-05-03 18:47:36,565 - httpx - INFO - HTTP Request: GET http://testserver/payments/services/TEST003 "HTTP/1.1 404 Not Found"
+2025-05-03 18:47:36,575 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:47:36,613 - payment_service - INFO - Creating new payment with ID: 1592e84f-e792-4031-9f36-fd0bd200e209
+2025-05-03 18:47:36,614 - payment_service - INFO - Payment 1592e84f-e792-4031-9f36-fd0bd200e209 created successfully
+2025-05-03 18:47:36,618 - payment_service - INFO - Sending email request to: http://email-service:8000/send-confirmation/
+2025-05-03 18:47:38,033 - payment_service - ERROR - Error calling email API: HTTPConnectionPool(host='email-service', port=8000): Max retries exceeded with url: /send-confirmation/ (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f95a3d6a6d0>: Failed to resolve 'email-service' ([Errno -2] Name or service not known)"))
+2025-05-03 18:47:38,039 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-03 18:47:38,052 - payment_service - INFO - Creating new payment with ID: 04208b65-d842-4b3c-bbf3-cb896d169cd9
+2025-05-03 18:47:38,053 - payment_service - INFO - Payment 04208b65-d842-4b3c-bbf3-cb896d169cd9 created successfully
+2025-05-03 18:47:38,056 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-03 18:47:38,064 - httpx - INFO - HTTP Request: GET http://testserver/payments/04208b65-d842-4b3c-bbf3-cb896d169cd9/info "HTTP/1.1 200 OK"
+2025-05-03 18:47:38,073 - payment_service - INFO - Creating new payment with ID: c39ab838-e3f0-458f-8936-f9b840bd8f4d
+2025-05-03 18:47:38,074 - payment_service - INFO - Payment c39ab838-e3f0-458f-8936-f9b840bd8f4d created successfully
+2025-05-03 18:47:38,077 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-03 18:47:38,084 - httpx - INFO - HTTP Request: PUT http://testserver/payments/c39ab838-e3f0-458f-8936-f9b840bd8f4d "HTTP/1.1 200 OK"
+2025-05-03 18:47:38,089 - httpx - INFO - HTTP Request: PUT http://testserver/payments/non_existent_id "HTTP/1.1 404 Not Found"
+2025-05-03 18:47:38,095 - payment_service - INFO - Creating new payment with ID: 3265b2ab-08bf-4f08-b538-9c18ed545931
+2025-05-03 18:47:38,096 - payment_service - INFO - Payment 3265b2ab-08bf-4f08-b538-9c18ed545931 created successfully
+2025-05-03 18:47:38,099 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-03 18:47:38,104 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/3265b2ab-08bf-4f08-b538-9c18ed545931 "HTTP/1.1 200 OK"
+2025-05-03 18:47:38,107 - httpx - INFO - HTTP Request: GET http://testserver/payments/3265b2ab-08bf-4f08-b538-9c18ed545931/info "HTTP/1.1 404 Not Found"
+2025-05-03 18:47:38,112 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/non_existent_id "HTTP/1.1 404 Not Found"
+2025-05-03 18:47:38,121 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:47:38,140 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 422 Unprocessable Entity"
+2025-05-03 18:47:40,199 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-03 18:47:40,203 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 422 Unprocessable Entity"
+2025-05-03 18:47:40,265 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-03 18:47:40,269 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 422 Unprocessable Entity"
+2025-05-03 18:47:40,328 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-03 18:47:40,333 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 422 Unprocessable Entity"
+2025-05-03 18:51:37,179 - httpx - INFO - HTTP Request: GET http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:51:37,188 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:51:37,194 - httpx - INFO - HTTP Request: GET http://testserver/payments/services/TEST001 "HTTP/1.1 200 OK"
+2025-05-03 18:51:37,203 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:51:37,214 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:51:37,221 - httpx - INFO - HTTP Request: PUT http://testserver/payments/services/TEST002 "HTTP/1.1 200 OK"
+2025-05-03 18:51:37,230 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:51:37,233 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/services/TEST003 "HTTP/1.1 200 OK"
+2025-05-03 18:51:37,240 - httpx - INFO - HTTP Request: GET http://testserver/payments/services/TEST003 "HTTP/1.1 404 Not Found"
+2025-05-03 18:51:37,248 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:51:37,310 - payment_service - INFO - Creating new payment with ID: bf7178c9-db99-43a9-b911-86daad5a1f3d
+2025-05-03 18:51:37,311 - payment_service - INFO - Payment bf7178c9-db99-43a9-b911-86daad5a1f3d created successfully
+2025-05-03 18:51:37,314 - payment_service - INFO - Sending email request to: http://email-service:8000/send-confirmation/
+2025-05-03 18:51:38,720 - payment_service - ERROR - Error calling email API: HTTPConnectionPool(host='email-service', port=8000): Max retries exceeded with url: /send-confirmation/ (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f76b003c760>: Failed to resolve 'email-service' ([Errno -2] Name or service not known)"))
+2025-05-03 18:51:38,726 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-03 18:51:38,738 - payment_service - INFO - Creating new payment with ID: 75dbdc68-a076-4454-bdd1-2940519b6f5a
+2025-05-03 18:51:38,739 - payment_service - INFO - Payment 75dbdc68-a076-4454-bdd1-2940519b6f5a created successfully
+2025-05-03 18:51:38,742 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-03 18:51:38,747 - httpx - INFO - HTTP Request: GET http://testserver/payments/75dbdc68-a076-4454-bdd1-2940519b6f5a/info "HTTP/1.1 200 OK"
+2025-05-03 18:51:38,755 - payment_service - INFO - Creating new payment with ID: 15cb7d44-50e2-45bb-bb49-b7e86450722b
+2025-05-03 18:51:38,756 - payment_service - INFO - Payment 15cb7d44-50e2-45bb-bb49-b7e86450722b created successfully
+2025-05-03 18:51:38,758 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-03 18:51:38,765 - httpx - INFO - HTTP Request: PUT http://testserver/payments/15cb7d44-50e2-45bb-bb49-b7e86450722b "HTTP/1.1 200 OK"
+2025-05-03 18:51:38,769 - httpx - INFO - HTTP Request: PUT http://testserver/payments/non_existent_id "HTTP/1.1 404 Not Found"
+2025-05-03 18:51:38,775 - payment_service - INFO - Creating new payment with ID: fe3864c5-454d-4c21-8afe-61db2f521895
+2025-05-03 18:51:38,775 - payment_service - INFO - Payment fe3864c5-454d-4c21-8afe-61db2f521895 created successfully
+2025-05-03 18:51:38,778 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-03 18:51:38,782 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/fe3864c5-454d-4c21-8afe-61db2f521895 "HTTP/1.1 200 OK"
+2025-05-03 18:51:38,787 - httpx - INFO - HTTP Request: GET http://testserver/payments/fe3864c5-454d-4c21-8afe-61db2f521895/info "HTTP/1.1 404 Not Found"
+2025-05-03 18:51:38,791 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/non_existent_id "HTTP/1.1 404 Not Found"
+2025-05-03 18:51:38,800 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 18:51:38,822 - payment_service - INFO - Payment application 7d303066-cefc-405f-9e88-92a76c37ef28 created successfully
+2025-05-03 18:51:38,824 - payment_service - INFO - Sending email request to: http://email-service:8000/send-application/
+2025-05-03 18:51:39,758 - payment_service - ERROR - Error calling email API: HTTPConnectionPool(host='email-service', port=8000): Max retries exceeded with url: /send-application/ (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f76b012e820>: Failed to resolve 'email-service' ([Errno -2] Name or service not known)"))
+2025-05-03 18:51:39,768 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-03 18:51:39,804 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-03 18:51:39,809 - payment_service - INFO - Payment application d6399ee3-3c44-49f7-b0d0-0058d5441f47 created successfully
+2025-05-03 18:51:39,810 - payment_service - INFO - Sending email request to: http://email-service:8000/send-application/
+2025-05-03 18:51:40,742 - payment_service - ERROR - Error calling email API: HTTPConnectionPool(host='email-service', port=8000): Max retries exceeded with url: /send-application/ (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f76b01259a0>: Failed to resolve 'email-service' ([Errno -2] Name or service not known)"))
+2025-05-03 18:51:40,749 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-03 18:51:40,758 - httpx - INFO - HTTP Request: GET http://testserver/payments/applications/d6399ee3-3c44-49f7-b0d0-0058d5441f47 "HTTP/1.1 200 OK"
+2025-05-03 18:51:40,769 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-03 18:51:40,774 - payment_service - INFO - Payment application ee0bd9fe-5b80-451c-a511-e1e631d9c221 created successfully
+2025-05-03 18:51:40,775 - payment_service - INFO - Sending email request to: http://email-service:8000/send-application/
+2025-05-03 18:51:41,707 - payment_service - ERROR - Error calling email API: HTTPConnectionPool(host='email-service', port=8000): Max retries exceeded with url: /send-application/ (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f76b00c7d60>: Failed to resolve 'email-service' ([Errno -2] Name or service not known)"))
+2025-05-03 18:51:41,711 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-03 18:51:41,715 - payment_service - INFO - Application ee0bd9fe-5b80-451c-a511-e1e631d9c221 approved and payment 74cddc89-0a85-4da4-96aa-d2b9eb07d480 created
+2025-05-03 18:51:41,717 - payment_service - INFO - Sending email request to: http://email-service:8000/send-approval/
+2025-05-03 18:51:42,640 - payment_service - ERROR - Error calling email API: HTTPConnectionPool(host='email-service', port=8000): Max retries exceeded with url: /send-approval/ (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f76b004e640>: Failed to resolve 'email-service' ([Errno -2] Name or service not known)"))
+2025-05-03 18:51:42,650 - httpx - INFO - HTTP Request: PUT http://testserver/payments/applications/ee0bd9fe-5b80-451c-a511-e1e631d9c221/approve "HTTP/1.1 200 OK"
+2025-05-03 18:51:42,661 - httpx - INFO - HTTP Request: GET http://testserver/payments/applications/ee0bd9fe-5b80-451c-a511-e1e631d9c221 "HTTP/1.1 200 OK"
+2025-05-03 18:51:42,675 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-03 18:51:42,680 - payment_service - INFO - Payment application 1a81ce65-7872-49cb-ba6f-4c1a15c703b3 created successfully
+2025-05-03 18:51:42,681 - payment_service - INFO - Sending email request to: http://email-service:8000/send-application/
+2025-05-03 18:51:43,605 - payment_service - ERROR - Error calling email API: HTTPConnectionPool(host='email-service', port=8000): Max retries exceeded with url: /send-application/ (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f76aedc7be0>: Failed to resolve 'email-service' ([Errno -2] Name or service not known)"))
+2025-05-03 18:51:43,611 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-03 18:51:43,618 - payment_service - INFO - Application 1a81ce65-7872-49cb-ba6f-4c1a15c703b3 rejected with reason: Did not meet requirements
+2025-05-03 18:51:43,622 - payment_service - INFO - Sending email request to: http://email-service:8000/send-rejection/
+2025-05-03 18:51:44,554 - payment_service - ERROR - Error calling email API: HTTPConnectionPool(host='email-service', port=8000): Max retries exceeded with url: /send-rejection/ (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f76b0034430>: Failed to resolve 'email-service' ([Errno -2] Name or service not known)"))
+2025-05-03 18:51:44,561 - httpx - INFO - HTTP Request: PUT http://testserver/payments/applications/1a81ce65-7872-49cb-ba6f-4c1a15c703b3/reject "HTTP/1.1 200 OK"
+2025-05-03 18:51:44,569 - httpx - INFO - HTTP Request: GET http://testserver/payments/applications/1a81ce65-7872-49cb-ba6f-4c1a15c703b3 "HTTP/1.1 200 OK"
+2025-05-03 18:51:44,585 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-03 18:51:44,591 - payment_service - INFO - Payment application 5acc40e5-405d-4200-a96a-fb30823f6c26 created successfully
+2025-05-03 18:51:44,593 - payment_service - INFO - Sending email request to: http://email-service:8000/send-application/
+2025-05-03 18:51:45,546 - payment_service - ERROR - Error calling email API: HTTPConnectionPool(host='email-service', port=8000): Max retries exceeded with url: /send-application/ (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f76aedc7f70>: Failed to resolve 'email-service' ([Errno -2] Name or service not known)"))
+2025-05-03 18:51:45,550 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-03 18:51:45,555 - payment_service - INFO - Application 5acc40e5-405d-4200-a96a-fb30823f6c26 approved and payment 69e3d76a-9f1b-4a79-977d-570ffbee90b8 created
+2025-05-03 18:51:45,557 - payment_service - INFO - Sending email request to: http://email-service:8000/send-approval/
+2025-05-03 18:51:46,488 - payment_service - ERROR - Error calling email API: HTTPConnectionPool(host='email-service', port=8000): Max retries exceeded with url: /send-approval/ (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f76b003c700>: Failed to resolve 'email-service' ([Errno -2] Name or service not known)"))
+2025-05-03 18:51:46,498 - httpx - INFO - HTTP Request: PUT http://testserver/payments/applications/5acc40e5-405d-4200-a96a-fb30823f6c26/approve "HTTP/1.1 200 OK"
+2025-05-03 18:51:46,508 - payment_service - INFO - Payment 69e3d76a-9f1b-4a79-977d-570ffbee90b8 processed successfully
+2025-05-03 18:51:46,511 - payment_service - INFO - Sending email request to: http://email-service:8000/send-confirmation/
+2025-05-03 18:51:47,440 - payment_service - ERROR - Error calling email API: HTTPConnectionPool(host='email-service', port=8000): Max retries exceeded with url: /send-confirmation/ (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f76b0034d60>: Failed to resolve 'email-service' ([Errno -2] Name or service not known)"))
+2025-05-03 18:51:47,450 - httpx - INFO - HTTP Request: POST http://testserver/payments/69e3d76a-9f1b-4a79-977d-570ffbee90b8/process "HTTP/1.1 200 OK"
+2025-05-03 18:51:47,459 - httpx - INFO - HTTP Request: GET http://testserver/payments/69e3d76a-9f1b-4a79-977d-570ffbee90b8/info "HTTP/1.1 200 OK"
+2025-05-03 19:00:18,690 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-03 19:00:18,691 - email_service - INFO - Default sender: payment@example.com
+2025-05-03 19:01:39,656 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-03 19:01:39,657 - email_service - INFO - Default sender: payment@example.com
+2025-05-03 19:01:39,807 - httpx - INFO - HTTP Request: GET http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 19:01:39,817 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 19:01:39,822 - httpx - INFO - HTTP Request: GET http://testserver/payments/services/TEST001 "HTTP/1.1 200 OK"
+2025-05-03 19:01:39,830 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 19:01:39,841 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 19:01:39,850 - httpx - INFO - HTTP Request: PUT http://testserver/payments/services/TEST002 "HTTP/1.1 200 OK"
+2025-05-03 19:01:39,858 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 19:01:39,863 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/services/TEST003 "HTTP/1.1 200 OK"
+2025-05-03 19:01:39,869 - httpx - INFO - HTTP Request: GET http://testserver/payments/services/TEST003 "HTTP/1.1 404 Not Found"
+2025-05-03 19:01:39,876 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 19:01:39,910 - payment_service - INFO - Creating new payment with ID: a13a1c6d-d15c-401e-96c2-3d9ceddcf771
+2025-05-03 19:01:39,911 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-03 19:01:40,449 - email_service - INFO - Sending EHLO command
+2025-05-03 19:01:40,694 - email_service - INFO - Starting TLS encryption
+2025-05-03 19:01:41,488 - email_service - INFO - Sending EHLO command after STARTTLS
+2025-05-03 19:01:42,263 - email_service - INFO - Logging in with username: 9c8dce622a3f58
+2025-05-03 19:01:42,763 - email_service - INFO - Sending email to: test_create_payment@example.com
+2025-05-03 19:01:43,748 - email_service - INFO - Closing SMTP connection
+2025-05-03 19:01:44,000 - email_service - INFO - Email sent successfully to test_create_payment@example.com
+2025-05-03 19:01:44,002 - payment_service - INFO - Payment a13a1c6d-d15c-401e-96c2-3d9ceddcf771 created successfully
+2025-05-03 19:01:44,011 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,029 - payment_service - INFO - Creating new payment with ID: 15a4f8c0-2682-40d6-99cf-bc85ff8cf56a
+2025-05-03 19:01:44,031 - payment_service - INFO - Payment 15a4f8c0-2682-40d6-99cf-bc85ff8cf56a created successfully
+2025-05-03 19:01:44,036 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,043 - httpx - INFO - HTTP Request: GET http://testserver/payments/15a4f8c0-2682-40d6-99cf-bc85ff8cf56a/info "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,050 - payment_service - INFO - Creating new payment with ID: 6bfac91f-82f2-48ca-9b66-1928d1b1401d
+2025-05-03 19:01:44,051 - payment_service - INFO - Payment 6bfac91f-82f2-48ca-9b66-1928d1b1401d created successfully
+2025-05-03 19:01:44,054 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,060 - httpx - INFO - HTTP Request: PUT http://testserver/payments/6bfac91f-82f2-48ca-9b66-1928d1b1401d "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,066 - httpx - INFO - HTTP Request: PUT http://testserver/payments/non_existent_id "HTTP/1.1 404 Not Found"
+2025-05-03 19:01:44,072 - payment_service - INFO - Creating new payment with ID: c28aef83-be2e-48fe-ba19-a9c1b7dba384
+2025-05-03 19:01:44,074 - payment_service - INFO - Payment c28aef83-be2e-48fe-ba19-a9c1b7dba384 created successfully
+2025-05-03 19:01:44,076 - httpx - INFO - HTTP Request: POST http://testserver/payments/create "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,080 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/c28aef83-be2e-48fe-ba19-a9c1b7dba384 "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,085 - httpx - INFO - HTTP Request: GET http://testserver/payments/c28aef83-be2e-48fe-ba19-a9c1b7dba384/info "HTTP/1.1 404 Not Found"
+2025-05-03 19:01:44,091 - httpx - INFO - HTTP Request: DELETE http://testserver/payments/non_existent_id "HTTP/1.1 404 Not Found"
+2025-05-03 19:01:44,100 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,107 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,128 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-03 19:01:44,134 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,138 - httpx - INFO - HTTP Request: GET http://testserver/payments/applications/afaa631c-4037-4875-8e94-116d2f622fc6 "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,147 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-03 19:01:44,152 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,157 - httpx - INFO - HTTP Request: PUT http://testserver/payments/applications/306c7740-ed86-4cba-b313-38da2ed2fbfc/approve "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,160 - httpx - INFO - HTTP Request: GET http://testserver/payments/applications/306c7740-ed86-4cba-b313-38da2ed2fbfc "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,169 - httpx - INFO - HTTP Request: POST http://testserver/payments/services "HTTP/1.1 400 Bad Request"
+2025-05-03 19:01:44,175 - httpx - INFO - HTTP Request: POST http://testserver/payments/apply "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,180 - httpx - INFO - HTTP Request: PUT http://testserver/payments/applications/edab3524-c8bd-4da2-ab7f-2b95c3453226/reject "HTTP/1.1 200 OK"
+2025-05-03 19:01:44,186 - httpx - INFO - HTTP Request: GET http://testserver/payments/applications/edab3524-c8bd-4da2-ab7f-2b95c3453226 "HTTP/1.1 200 OK"
