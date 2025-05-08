@@ -141,3 +141,49 @@ smtplib.SMTPServerDisconnected: Connection unexpectedly closed
 2025-05-08 23:32:55,346 - email_service - INFO - Email sent successfully to user@example.com
 2025-05-08 23:40:14,921 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
 2025-05-08 23:40:18,649 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 00:59:52,205 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:00:14,150 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:00:20,751 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 01:02:35,336 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:02:38,892 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 01:03:10,516 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:03:14,090 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 01:03:46,353 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:03:49,950 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 01:04:10,604 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:04:14,188 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 01:04:55,521 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:04:59,183 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 01:05:18,308 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:05:22,014 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 01:06:30,827 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:06:34,491 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 01:10:06,096 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:10:09,787 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 01:11:04,201 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:11:48,029 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:11:58,657 - email_service - INFO - Sending application created email for application ID: a84e360b-43bd-43eb-b35e-377574be0652
+2025-05-09 01:11:58,658 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:12:02,964 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 01:12:02,966 - email_service - INFO - Application created email sent successfully for ID: a84e360b-43bd-43eb-b35e-377574be0652
+2025-05-09 01:13:11,461 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:13:42,489 - email_service - INFO - Sending payment created email for payment ID: 870dc0b3-f374-47c4-a3cb-c6f50ee91081
+2025-05-09 01:13:42,490 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:13:46,712 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 01:13:46,714 - email_service - INFO - Payment created email sent successfully for ID: 870dc0b3-f374-47c4-a3cb-c6f50ee91081
+2025-05-09 01:17:03,729 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:20:12,359 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:20:26,388 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:20:36,979 - email_service - INFO - Sending payment created email for payment ID: 3d84dbe0-f98d-46ed-bb34-254f16d6769b
+2025-05-09 01:20:36,980 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:20:40,854 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 01:20:40,855 - email_service - INFO - Payment created email sent successfully for ID: 3d84dbe0-f98d-46ed-bb34-254f16d6769b
+2025-05-09 01:22:45,822 - email_service - INFO - Sending application created email for application ID: string
+2025-05-09 01:22:45,824 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:22:49,569 - email_service - INFO - Email sent successfully to string
+2025-05-09 01:22:49,570 - email_service - INFO - Application created email sent successfully for ID: string
+2025-05-09 01:24:24,103 - email_service - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:24:43,860 - email_service - INFO - Sending payment created email for payment ID: 4a4d0a3c-b87f-4db3-ad71-31e94da85827
+2025-05-09 01:24:43,920 - email_service - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:24:47,619 - email_service - INFO - Email sent successfully to user@example.com
+2025-05-09 01:24:47,620 - email_service - INFO - Payment created email sent successfully for ID: 4a4d0a3c-b87f-4db3-ad71-31e94da85827

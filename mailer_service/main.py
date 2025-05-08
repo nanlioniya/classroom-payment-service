@@ -10,25 +10,12 @@ from datetime import datetime
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, EmailStr
 from dotenv import load_dotenv
+from common_utils.logger.client import LoggerClient
 
 load_dotenv()
-
+logger = LoggerClient("mailer-service")
 app = FastAPI(title="Email Service", description="Email Sending Microservice")
 
-# Set up logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(),
-        logging.FileHandler("email_service.log")
-    ]
-)
-
-logger = logging.getLogger("email_service")
-log_info = logger.info
-log_error = logger.error
-log_warning = logger.warning
 
 # Email configuration
 class EmailConfig:
@@ -39,7 +26,7 @@ class EmailConfig:
         self.smtp_password = os.environ.get("SMTP_PASSWORD", "").strip("'")
         self.default_sender = os.environ.get("DEFAULT_SENDER", "payment@example.com")
         
-        log_info(f"SMTP Configuration: {self.smtp_server}:{self.smtp_port}")
+        logger.info(f"SMTP Configuration: {self.smtp_server}:{self.smtp_port}")
 
 # Email sender class
 class EmailSender:
@@ -48,7 +35,7 @@ class EmailSender:
     
     def send_email(self, to_emails, subject, html_content, text_content=None, from_email=None):
         if not to_emails:
-            log_error("No recipients specified")
+            logger.error("No recipients specified")
             return False
             
         msg = MIMEMultipart("alternative")
@@ -64,10 +51,10 @@ class EmailSender:
         msg.attach(MIMEText(html_content, "html", "utf-8"))
         
         try:
-            log_info(f"Connecting to SMTP server: {self.config.smtp_server}:{self.config.smtp_port}")
+            logger.info(f"Connecting to SMTP server: {self.config.smtp_server}:{self.config.smtp_port}")
             
             if os.environ.get("TESTING") == "True":
-                log_info(f"[TEST MODE] Would send email to {to_emails} with subject: {subject}")
+                logger.info(f"[TEST MODE] Would send email to {to_emails} with subject: {subject}")
                 return True
                 
             server = smtplib.SMTP(self.config.smtp_server, self.config.smtp_port, timeout=30)
@@ -84,11 +71,11 @@ class EmailSender:
             )
             
             server.quit()
-            log_info(f"Email sent successfully to {to_emails}")
+            logger.info(f"Email sent successfully to {to_emails}")
             return True
         except Exception as e:
-            log_error(f"Error sending email: {str(e)}")
-            log_error(f"Traceback: {traceback.format_exc()}")
+            logger.error(f"Error sending email: {str(e)}")
+            logger.error(f"Traceback: {traceback.format_exc()}")
             return False
 
 # Create email sender instance
@@ -142,6 +129,7 @@ class PaymentFailedRequest(EmailBase):
 @app.post("/application/created")
 async def send_application_created(request: ApplicationCreatedRequest):
     """Send email for application creation success"""
+    logger.info(f"Sending application created email for application ID: {request.application_id}")
     subject = f"Application Successfully Created #{request.application_id}"
     
     html_content = f"""
@@ -189,13 +177,16 @@ async def send_application_created(request: ApplicationCreatedRequest):
     )
     
     if result:
+        logger.info(f"Application created email sent successfully for ID: {request.application_id}")
         return {"status": "success", "message": "Application creation email sent"}
     else:
+        logger.error(f"Failed to send application created email for ID: {request.application_id}")
         raise HTTPException(status_code=500, detail="Failed to send application creation email")
 
 @app.post("/application/rejected")
 async def send_application_rejected(request: ApplicationRejectedRequest):
     """Send email for application rejection"""
+    logger.info(f"Sending application rejected email for application ID: {request.application_id}")
     subject = f"Application Not Approved #{request.application_id}"
     
     html_content = f"""
@@ -245,13 +236,16 @@ async def send_application_rejected(request: ApplicationRejectedRequest):
     )
     
     if result:
+        logger.info(f"Application rejected email sent successfully for ID: {request.application_id}")
         return {"status": "success", "message": "Application rejection email sent"}
     else:
+        logger.error(f"Failed to send application rejected email for ID: {request.application_id}")
         raise HTTPException(status_code=500, detail="Failed to send application rejection email")
 
 @app.post("/application/approved")
 async def send_application_approved(request: ApplicationApprovedRequest):
     """Send email for application approval"""
+    logger.info(f"Sending application approved email for application ID: {request.application_id}")
     subject = f"Application Approved #{request.application_id}"
     
     html_content = f"""
@@ -301,13 +295,16 @@ async def send_application_approved(request: ApplicationApprovedRequest):
     )
     
     if result:
+        logger.info(f"Application approved email sent successfully for ID: {request.application_id}")
         return {"status": "success", "message": "Application approval email sent"}
     else:
+        logger.error(f"Failed to send application approved email for ID: {request.application_id}")
         raise HTTPException(status_code=500, detail="Failed to send application approval email")
 
 @app.post("/application/deleted")
 async def send_application_deleted_email(request: ApplicationDeletedRequest):
     """Send notification email for application deletion"""
+    logger.info(f"Sending application deleted email for application ID: {request.application_id}")
     application_id = request.application_id
     service_name = request.service_name
     amount = request.amount
@@ -365,14 +362,17 @@ async def send_application_deleted_email(request: ApplicationDeletedRequest):
     )
     
     if result:
+        logger.info(f"Application deleted email sent successfully for ID: {application_id}")
         return {"status": "success", "message": "Application deletion email sent"}
     else:
+        logger.error(f"Failed to send application deleted email for ID: {application_id}")
         raise HTTPException(status_code=500, detail="Failed to send application deletion email")
 
 
 @app.post("/payment/created")
 async def send_payment_created(request: PaymentCreatedRequest):
     """Send email for payment invoice creation (payment reminder)"""
+    logger.info(f"Sending payment created email for payment ID: {request.payment_id}")
     subject = f"Payment Invoice Created #{request.payment_id}"
     
     due_date_info = f"<p><strong>Due Date:</strong> {request.due_date}</p>" if request.due_date else ""
@@ -430,13 +430,16 @@ async def send_payment_created(request: PaymentCreatedRequest):
     )
     
     if result:
+        logger.info(f"Payment created email sent successfully for ID: {request.payment_id}")
         return {"status": "success", "message": "Payment creation email sent"}
     else:
+        logger.error(f"Failed to send payment created email for ID: {request.payment_id}")
         raise HTTPException(status_code=500, detail="Failed to send payment creation email")
 
 @app.post("/payment/success")
 async def send_payment_success(request: PaymentSuccessRequest):
     """Send email for successful payment"""
+    logger.info(f"Sending payment success email for payment ID: {request.payment_id}")
     subject = f"Payment Confirmation #{request.payment_id}"
     
     transaction_info = f"<p><strong>Transaction ID:</strong> {request.transaction_id}</p>" if request.transaction_id else ""
@@ -489,13 +492,16 @@ async def send_payment_success(request: PaymentSuccessRequest):
     )
     
     if result:
+        logger.info(f"Payment success email sent successfully for ID: {request.payment_id}")
         return {"status": "success", "message": "Payment success email sent"}
     else:
+        logger.error(f"Failed to send payment success email for ID: {request.payment_id}")
         raise HTTPException(status_code=500, detail="Failed to send payment success email")
 
 @app.post("/payment/failed")
 async def send_payment_failed(request: PaymentFailedRequest):
     """Send email for failed payment"""
+    logger.info(f"Sending payment failed email for payment ID: {request.payment_id}")
     subject = f"Payment Processing Failed #{request.payment_id}"
     
     html_content = f"""
@@ -550,8 +556,10 @@ async def send_payment_failed(request: PaymentFailedRequest):
     )
     
     if result:
+        logger.info(f"Payment failed email sent successfully for ID: {request.payment_id}")
         return {"status": "success", "message": "Payment failed email sent"}
     else:
+        logger.error(f"Failed to send payment failed email for ID: {request.payment_id}")
         raise HTTPException(status_code=500, detail="Failed to send payment failed email")
 
 

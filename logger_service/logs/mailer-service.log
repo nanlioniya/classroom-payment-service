@@ -1,0 +1,5 @@
+2025-05-09 01:32:30,149 - INFO - SMTP Configuration: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:32:38,460 - INFO - Sending payment created email for payment ID: 83904cba-522a-4d72-b1c8-df9febf99ac5
+2025-05-09 01:32:38,466 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-09 01:32:42,181 - INFO - Email sent successfully to user@example.com
+2025-05-09 01:32:42,186 - INFO - Payment created email sent successfully for ID: 83904cba-522a-4d72-b1c8-df9febf99ac5
