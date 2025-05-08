@@ -9,7 +9,6 @@ import csv
 import os
 import requests
 # from logger_service.main import log_info, log_error, log_warning, log_debug, get_logger
-# from mailer_service.main import send_payment_confirmation, send_payment_failed
 
 app = FastAPI()
 
@@ -31,8 +30,7 @@ class PaymentCreate(BaseModel):
     service_id: str
     amount: float
     user_id: str
-    order_id: str
-    email: Optional[EmailStr] = None
+    email: EmailStr
 
 class PaymentStatus(BaseModel):
     payment_id: str
@@ -45,10 +43,9 @@ class Payment(BaseModel):
     service_id: str
     amount: float
     user_id: str
-    order_id: str
-    status: str
+    status: str # "pending", "paid", "failed"
     created_at: datetime
-    email: Optional[EmailStr] = None
+    email: EmailStr
 
 class PaymentUpdate(BaseModel):
     status: str
@@ -61,6 +58,7 @@ class PaymentApplication(BaseModel):
     service_id: str
     amount: float
     reason: str
+    email: EmailStr
     
 class PaymentApplicationResponse(BaseModel):
     application_id: str
@@ -75,40 +73,36 @@ payment_services = {}
 payments = {}
 payment_applications = {}
 
-
-
 def send_email(endpoint: str, data: Dict[str, Any]) -> bool:
     url = f"{EMAIL_SERVICE_URL}/{endpoint}"
     headers = {"Content-Type": "application/json"}
     
-    print(f"發送郵件到 {url}")
-    print(f"郵件數據: {data}")
+    print(f"Sending email to {url}")
+    print(f"Email data: {data}")
     
     try:
-        # 轉換數據為 JSON 字符串，確保格式與 curl 命令相同
+        # Convert data to JSON string, ensuring format matches curl command
         import json
         json_data = json.dumps(data)
-        print(f"JSON 數據: {json_data}")
+        print(f"JSON data: {json_data}")
         
-        # 使用 data 參數而不是 json 參數
+        # Use data parameter instead of json parameter
         response = requests.post(
             url, 
-            data=json_data,  # 使用 data 而不是 json
+            data=json_data,  # Use data instead of json
             headers=headers, 
-            timeout=30  # 增加超時時間
+            timeout=30  # Increase timeout
         )
         
-        print(f"響應狀態碼: {response.status_code}")
-        print(f"響應內容: {response.text}")
+        print(f"Response status code: {response.status_code}")
+        print(f"Response content: {response.text}")
         
         return response.status_code == 200
     except Exception as e:
         import traceback
-        print(f"異常: {str(e)}")
-        print(f"堆棧跟踪: {traceback.format_exc()}")
+        print(f"Exception: {str(e)}")
+        print(f"Stack trace: {traceback.format_exc()}")
         return False
-
-
 
 # payment service related nodes
 @app.get("/payments/services")
@@ -151,50 +145,43 @@ async def delete_payment_service(service_id: str) -> MessageResponse:
 async def create_payment(payment: PaymentCreate) -> PaymentStatus:
     payment_id = str(uuid.uuid4()) # identify the payment
     # log_info(f"Creating new payment with ID: {payment_id}")
-    
+
     try:
         new_payment = Payment(
             payment_id=payment_id,
             service_id=payment.service_id,
             amount=payment.amount,
             user_id=payment.user_id,
-            order_id=payment.order_id,
             status="pending",
             created_at=datetime.now(),
             email=payment.email
         )
         payments[payment_id] = new_payment
-        
+
         # Get service name
         service_name = "Unknown Service"
         if new_payment.service_id in payment_services:
             service_name = payment_services[new_payment.service_id].name
         
-        # Send payment confirmation email
-        # if hasattr(payment, 'email') and payment.email:
-        #     send_payment_confirmation(payment.email, payment_id, payment.amount, service_name)
+        if service_name == "Unknown Service":
+            raise HTTPException(status_code=404, detail="Service not found")
+
+        due_date = new_payment.created_at + timedelta(days=30)
+        # Format due_date as string (e.g., "YYYY-MM-DD")
+        due_date_str = due_date.strftime("%Y-%m-%d")
+
+        # Build email_data conforming to PaymentCreatedRequest
+        email_data = {
+            "recipient": new_payment.email,
+            "payment_id": str(payment_id),  # Ensure it's a string
+            "service_name": service_name,
+            "amount": float(new_payment.amount),  # Ensure it's a float
+            "due_date": due_date_str  # Ensure it's a string
+        }            
         
-        if new_payment.email:  # 檢查是否提供了郵箱
-
-            due_date = new_payment.created_at + timedelta(days=30)
-            # 格式化 due_date 為字符串 (例如 "YYYY-MM-DD")
-            due_date_str = due_date.strftime("%Y-%m-%d")
-
-            # 構建符合 PaymentCreatedRequest 的 email_data
-            email_data = {
-                "recipient": new_payment.email,
-                "payment_id": str(payment_id),  # 確保是字符串
-                "service_name": service_name,
-                "amount": float(new_payment.amount),  # 確保是浮點數
-                "due_date": due_date_str  # 確保是字符串
-            }            
-            # 添加調試輸出
-            # print(f"Sending email to {EMAIL_SERVICE_URL}/payment/created")
-            # print(f"Email data: {email_data}")
-            
-            success = send_email("payment/created", email_data)
-            if not success:
-                print("Failed to send email notification")
+        success = send_email("payment/created", email_data)
+        if not success:
+            print("Failed to send email notification")
 
         return {
             "payment_id": payment_id,
@@ -203,12 +190,7 @@ async def create_payment(payment: PaymentCreate) -> PaymentStatus:
             "created_at": new_payment.created_at.isoformat()
         }
     except Exception as e:
-        # log_error(f"Error creating payment: {str(e)}")
-        
-        # Send payment failed email
-        # if hasattr(payment, 'email') and payment.email:
-        #     send_payment_failed(payment.email, payment_id, payment.amount, str(e))
-            
+        # log_error(f"Error creating payment: {str(e)}")           
         raise HTTPException(status_code=500, detail="Failed to create payment")
 
 @app.get("/payments/{payment_id}/info")
@@ -231,6 +213,36 @@ async def update_payment(payment_id: str, payment_update: PaymentUpdate) -> Paym
     
     payment = payments[payment_id]
     payment.status = payment_update.status
+
+    # Get service name
+    service_name = "Unknown Service"
+    if payment.service_id in payment_services:
+        service_name = payment_services[payment.service_id].name
+    if payment.status == "paid":
+        # Send payment success email
+        email_data = {
+            "payment_id": payment_id,
+            "service_name": service_name,
+            "amount": payment.amount,
+            "recipient": payment.email
+        }            
+        
+        success = send_email("payment/success", email_data)
+        if not success:
+            print("Failed to send email notification")
+    elif payment.status == "failed":
+        # Send payment failed email
+        email_data = {
+            "payment_id": payment_id,
+            "service_name": service_name,
+            "amount": payment.amount,
+            "reason": "invalid card",
+            "recipient": payment.email
+        }            
+            
+        success = send_email("/payment/failed", email_data)
+        if not success:
+            print("Failed to send email notification")
     return payment
 
 @app.delete("/payments/{payment_id}")
@@ -243,6 +255,8 @@ async def delete_payment(payment_id: str) -> MessageResponse:
 
 @app.post("/payments/apply")
 async def apply_payment(application: PaymentApplication) -> PaymentApplicationResponse:
+    print(f"Received payment application: {application}")
+    print(f"Available services: {list(payment_services.keys())}")
     """User applies for payment"""
     application_id = str(uuid.uuid4())
     
@@ -258,14 +272,30 @@ async def apply_payment(application: PaymentApplication) -> PaymentApplicationRe
         "amount": application.amount,
         "reason": application.reason,
         "status": "pending",  # Initial status is pending review
-        "created_at": datetime.now()
+        "created_at": datetime.now(),
+        "email": application.email
     }
-    
-    return {
+
+    # Get service name
+    service_name = "Unknown Service"
+    if application.service_id in payment_services:
+        service_name = payment_services[application.service_id].name
+    email_data = {
         "application_id": application_id,
-        "status": "pending",
-        "created_at": payment_applications[application_id]["created_at"].isoformat()
-    }
+        "service_name": service_name,
+        "amount": application.amount,
+        "recipient": application.email
+    }            
+    
+    success = send_email("application/created", email_data)
+    if not success:
+        print("Failed to send email notification")
+    
+    return PaymentApplicationResponse(
+        application_id=application_id,
+        status="pending",
+        created_at=payment_applications[application_id]["created_at"].isoformat()
+    )
 
 @app.get("/payments/applications/{application_id}")
 async def get_application_info(application_id: str) -> PaymentApplicationResponse:
@@ -296,26 +326,89 @@ async def approve_application(application_id: str) -> dict:
         service_id=application["service_id"],
         amount=application["amount"],
         user_id=application["user_id"],
-        order_id=application_id,  # Use application ID as order ID
         status="completed",
-        created_at=datetime.now()
+        created_at=datetime.now(),
+        email=application["email"]
     )
     payments[payment_id] = new_payment
+
+    # Get service name
+    service_name = "Unknown Service"
+    if new_payment.service_id in payment_services:
+        service_name = payment_services[new_payment.service_id].name
+    email_data = {
+        "application_id": application_id,
+        "service_name": service_name,
+        "amount": application['amount'],
+        "payment_id": payment_id,
+        "recipient": application["email"]
+    }            
+    
+    success = send_email("application/approved", email_data)
+    if not success:
+        print("Failed to send email notification")
     
     return {"message": "Application approved and payment created", "payment_id": payment_id}
 
 @app.put("/payments/applications/{application_id}/reject")
-async def reject_application(application_id: str) -> MessageResponse:
+async def reject_application(application_id: str, reason: str) -> MessageResponse:
     """Reject payment application"""
     if application_id not in payment_applications:
         raise HTTPException(status_code=404, detail="Application not found")
     
     application = payment_applications[application_id]
     application["status"] = "rejected"
+
+    # Get service name
+    service_name = "Unknown Service"
+    if application["service_id"] in payment_services:
+        service_name = payment_services[application["service_id"]].name
+    email_data = {
+        "application_id": application_id,
+        "service_name": service_name,
+        "amount": application['amount'],
+        "reason": reason,
+        "recipient": application["email"]
+    }            
+    
+    success = send_email("application/rejected", email_data)
+    if not success:
+        print("Failed to send email notification")
     
     return {"message": "Application rejected"}
 
-# Modified: Download payment information endpoint - in CSV format
+@app.delete("/payments/applications/{application_id}")
+async def delete_application(application_id: str) -> MessageResponse:
+    """Delete payment application"""
+    if application_id not in payment_applications:
+        raise HTTPException(status_code=404, detail="Application not found")
+    
+    # Save application info for email
+    application = payment_applications[application_id]
+    
+    # Get service name
+    service_name = "Unknown Service"
+    if application["service_id"] in payment_services:
+        service_name = payment_services[application["service_id"]].name
+    
+    # Delete application
+    del payment_applications[application_id]
+    
+    # Send deletion notification email
+    email_data = {
+        "application_id": application_id,
+        "service_name": service_name,
+        "amount": application['amount'],
+        "recipient": application["email"]
+    }            
+    
+    success = send_email("application/deleted", email_data)
+    if not success:
+        print("Failed to send email notification")
+    
+    return {"message": "Payment application successfully deleted"}
+
+# Download payment information endpoint - in CSV format
 @app.get("/payments/{payment_id}/download")
 async def download_payment(payment_id: str) -> FileResponse:
     """Download payment information in CSV format"""
@@ -360,7 +453,6 @@ async def download_payment(payment_id: str) -> FileResponse:
             service_name,
             payment.amount,
             payment.user_id,
-            payment.order_id,
             payment.status,
             payment.created_at.isoformat()
         ])
@@ -371,5 +463,3 @@ async def download_payment(payment_id: str) -> FileResponse:
         filename=f"payment_{payment_id}.csv",
         media_type="text/csv"
     )
-
-
