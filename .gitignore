@@ -1,5 +1,7 @@
 echo "# Python
 venv/
+logs/
+csv_exports/
 __pycache__/
 *.py[cod]
 *$py.class
