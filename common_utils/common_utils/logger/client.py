@@ -24,7 +24,7 @@ class LoggerClient:
             response = requests.post(f"{self.logger_url}/log", json=log_data, timeout=2)
             return response.status_code == 200
         except Exception as e:
-            # 如果日誌服務不可用，在控制台輸出
+            # If the logging service is unavailable, output to console
             print(f"Error sending log to logger service: {str(e)}")
             print(f"{level} - {message} - {details}")
             return False

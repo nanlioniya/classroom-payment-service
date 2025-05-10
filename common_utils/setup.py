@@ -5,7 +5,7 @@ setup(
     version="0.1.0",
     packages=find_packages(),
     install_requires=[
-        "requests",  # 添加 logger_client 需要的依賴
+        "requests",
     ],
     author="pinyun",
     author_email="huangp585@gmail.com",

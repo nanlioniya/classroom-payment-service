@@ -8,10 +8,14 @@ import csv
 import os
 import requests
 from common_utils.logger.client import LoggerClient
+from common_utils.mailer.client import MailerClient
+
 
 app = FastAPI()
 logger = LoggerClient("payment-service")
 EMAIL_SERVICE_URL = os.environ.get("EMAIL_SERVICE_URL", "http://localhost:8001")
+
+mailer = MailerClient("payment-service", EMAIL_SERVICE_URL)
 
 # model definition
 class PaymentService(BaseModel):
@@ -72,40 +76,138 @@ payment_services = {}
 payments = {}
 payment_applications = {}
 
-def send_email(endpoint: str, data: Dict[str, Any]) -> bool:
-    url = f"{EMAIL_SERVICE_URL}/{endpoint}"
-    headers = {"Content-Type": "application/json"}
-    
-    logger.debug(f"Sending email to {url}", {"endpoint": endpoint, "data": data})
-    
+def send_payment_created_email(payment_id: str, email: str, service_name: str, amount: float, due_date: str):
     try:
-        # Convert data to JSON string, ensuring format matches curl command
-        import json
-        json_data = json.dumps(data)
-        logger.debug(f"JSON data: {json_data}", {"json_data": json_data})
-        
-        # Use data parameter instead of json parameter
-        response = requests.post(
-            url, 
-            data=json_data,  # Use data instead of json
-            headers=headers, 
-            timeout=30  # Increase timeout
+        mailer.send_template_email(
+            to_email=email,
+            template_id="payment_created",
+            template_data={
+                "payment_id": payment_id,
+                "service_name": service_name,
+                "amount": amount,
+                "due_date": due_date
+            }
         )
-        
-        logger.debug(f"Email response", {
-            "status_code": response.status_code,
-            "content": response.text
-        })
-        
-        return response.status_code == 200
+        logger.info(f"Payment created email sent to {email}")
+        return True
     except Exception as e:
-        import traceback
-        logger.error(f"Failed to send email", {
-            "error": str(e),
-            "stack_trace": traceback.format_exc(),
-            "endpoint": endpoint
-        })
+        logger.error(f"Failed to send payment created email: {str(e)}")
         return False
+
+def send_payment_success_email(payment_id: str, email: str, service_name: str, amount: float, transaction_id: Optional[str] = None):
+    try:
+        template_data = {
+            "payment_id": payment_id,
+            "service_name": service_name,
+            "amount": amount
+        }
+        
+        if transaction_id:
+            template_data["transaction_id"] = transaction_id
+            
+        mailer.send_template_email(
+            to_email=email,
+            template_id="payment_success",
+            template_data=template_data
+        )
+        logger.info(f"Payment success email sent to {email}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to send payment success email: {str(e)}")
+        return False
+
+def send_payment_failed_email(payment_id: str, email: str, service_name: str, amount: float, reason: str):
+    try:
+        mailer.send_template_email(
+            to_email=email,
+            template_id="payment_failed",
+            template_data={
+                "payment_id": payment_id,
+                "service_name": service_name,
+                "amount": amount,
+                "reason": reason
+            }
+        )
+        logger.info(f"Payment failed email sent to {email}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to send payment failed email: {str(e)}")
+        return False
+
+def send_application_created_email(application_id: str, email: str, service_name: str, amount: float):
+    try:
+        mailer.send_template_email(
+            to_email=email,
+            template_id="application_created",
+            template_data={
+                "application_id": application_id,
+                "service_name": service_name,
+                "amount": amount
+            }
+        )
+        logger.info(f"Application created email sent to {email}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to send application created email: {str(e)}")
+        return False
+
+def send_application_approved_email(application_id: str, email: str, service_name: str, amount: float, payment_id: str):
+    try:
+        mailer.send_template_email(
+            to_email=email,
+            template_id="application_approved",
+            template_data={
+                "application_id": application_id,
+                "service_name": service_name,
+                "amount": amount,
+                "payment_id": payment_id
+            }
+        )
+        logger.info(f"Application approved email sent to {email}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to send application approved email: {str(e)}")
+        return False
+
+def send_application_rejected_email(application_id: str, email: str, service_name: str, amount: float, reason: str):
+    try:
+        mailer.send_template_email(
+            to_email=email,
+            template_id="application_rejected",
+            template_data={
+                "application_id": application_id,
+                "service_name": service_name,
+                "amount": amount,
+                "reason": reason
+            }
+        )
+        logger.info(f"Application rejected email sent to {email}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to send application rejected email: {str(e)}")
+        return False
+
+def send_application_deleted_email(application_id: str, email: str, service_name: str, amount: float):
+    try:
+        mailer.send_template_email(
+            to_email=email,
+            template_id="application_deleted",
+            template_data={
+                "application_id": application_id,
+                "service_name": service_name,
+                "amount": amount
+            }
+        )
+        logger.info(f"Application deleted email sent to {email}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to send application deleted email: {str(e)}")
+        return False
+
+# Routes
+@app.get("/")
+def read_root():
+    return {"status": "ok", "service": "payment-service"}
 
 # payment service related nodes
 @app.get("/payments/services")
@@ -155,6 +257,7 @@ async def delete_payment_service(service_id: str) -> MessageResponse:
     logger.info(f"Payment service deleted successfully", {"service_id": service_id})
     return {"message": "Payment service deleted successfully"}
 
+
 # payment order related nodes
 @app.post("/payments/create")
 async def create_payment(payment: PaymentCreate) -> PaymentStatus:
@@ -185,19 +288,19 @@ async def create_payment(payment: PaymentCreate) -> PaymentStatus:
         # Format due_date as string (e.g., "YYYY-MM-DD")
         due_date_str = due_date.strftime("%Y-%m-%d")
 
-        # Build email_data conforming to PaymentCreatedRequest
-        email_data = {
-            "recipient": new_payment.email,
-            "payment_id": str(payment_id),  # Ensure it's a string
-            "service_name": service_name,
-            "amount": float(new_payment.amount),  # Ensure it's a float
-            "due_date": due_date_str  # Ensure it's a string
-        }            
+        # Send email notification
+        success = send_payment_created_email(
+            payment_id=str(payment_id),
+            email=new_payment.email,
+            service_name=service_name,
+            amount=float(new_payment.amount),
+            due_date=due_date_str
+        )
         
-        success = send_email("payment/created", email_data)
         if not success:
             logger.warning("Failed to send email notification", {"payment_id": payment_id, "email": new_payment.email})
-        # 記錄成功的支付
+        
+        # Record successful payment
         logger.info(f"Payment created for user {payment.user_id}", {
             "payment_id": payment_id,
             "amount": payment.amount,
@@ -247,34 +350,105 @@ async def update_payment(payment_id: str, payment_update: PaymentUpdate) -> Paym
     service_name = "Unknown Service"
     if payment.service_id in payment_services:
         service_name = payment_services[payment.service_id].name
+    
     if payment.status == "paid":
         logger.info(f"Payment marked as paid", {"payment_id": payment_id})
         # Send payment success email
-        email_data = {
-            "payment_id": payment_id,
-            "service_name": service_name,
-            "amount": payment.amount,
-            "recipient": payment.email
-        }            
-        
-        success = send_email("payment/success", email_data)
-        if not success:
-            logger.warning("Failed to send payment success email", {"payment_id": payment_id, "email": payment.email})
+    success = send_payment_success_email(
+        payment_id=payment_id,
+        email=payment.email,
+        service_name=service_name,
+            amount=payment.amount
+    )
+    
+    if not success:
+        logger.warning("Failed to send payment success email", {"payment_id": payment_id, "email": payment.email})
+    
     elif payment.status == "failed":
         logger.info(f"Payment marked as failed", {"payment_id": payment_id})
-        # Send payment failed email
-        email_data = {
-            "payment_id": payment_id,
-            "service_name": service_name,
-            "amount": payment.amount,
-            "reason": "invalid card",
-            "recipient": payment.email
-        }            
-            
-        success = send_email("/payment/failed", email_data)
-        if not success:
-            logger.warning("Failed to send payment failure email", {"payment_id": payment_id, "email": payment.email})
+        # Send payment failure email
+    success = send_payment_failed_email(
+        payment_id=payment_id,
+        email=payment.email,
+        service_name=service_name,
+        amount=payment.amount,
+        reason="Payment processing failed"
+    )
+    
+    if not success:
+        logger.warning("Failed to send payment failure email", {"payment_id": payment_id, "email": payment.email})
+    
     return payment
+
+@app.post("/payments/{payment_id}/process")
+async def process_payment(payment_id: str, request: PaymentProcessRequest = None):
+    if payment_id not in payments:
+        logger.warning(f"Payment not found", {"payment_id": payment_id})
+        raise HTTPException(status_code=404, detail="Payment not found")
+    
+    payment = payments[payment_id]
+    
+    # Simulate payment processing
+    # In a real application, this would integrate with a payment gateway
+    payment.status = "paid"
+    
+    # Get service name
+    service_name = "Unknown Service"
+    if payment.service_id in payment_services:
+        service_name = payment_services[payment.service_id].name
+    
+    # Send email notification
+    transaction_id = request.transaction_id if request and request.transaction_id else str(uuid.uuid4())
+    success = send_payment_success_email(
+        payment_id=payment_id,
+        email=payment.email,
+        service_name=service_name,
+        amount=payment.amount,
+        transaction_id=transaction_id
+    )
+    
+    if not success:
+        logger.warning("Failed to send payment success email", {"payment_id": payment_id, "email": payment.email})
+    
+    return {
+        "payment_id": payment.payment_id,
+        "status": payment.status,
+        "amount": payment.amount,
+        "created_at": payment.created_at.isoformat()
+    }
+
+@app.post("/payments/{payment_id}/fail")
+async def fail_payment(payment_id: str):
+    if payment_id not in payments:
+        logger.warning(f"Payment not found", {"payment_id": payment_id})
+        raise HTTPException(status_code=404, detail="Payment not found")
+    
+    payment = payments[payment_id]
+    payment.status = "failed"
+    
+    # Get service name
+    service_name = "Unknown Service"
+    if payment.service_id in payment_services:
+        service_name = payment_services[payment.service_id].name
+    
+    # Send email notification
+    success = send_payment_failed_email(
+        payment_id=payment_id,
+        email=payment.email,
+        service_name=service_name,
+        amount=payment.amount,
+        reason="Payment processing failed"
+    )
+    
+    if not success:
+        logger.warning("Failed to send payment failure email", {"payment_id": payment_id, "email": payment.email})
+    
+    return {
+        "payment_id": payment.payment_id,
+        "status": payment.status,
+        "amount": payment.amount,
+        "created_at": payment.created_at.isoformat()
+    }
 
 @app.delete("/payments/{payment_id}")
 async def delete_payment(payment_id: str) -> MessageResponse:
@@ -312,17 +486,16 @@ async def apply_payment(application: PaymentApplication) -> PaymentApplicationRe
     }
 
     # Get service name
-    service_name = "Unknown Service"
-    if application.service_id in payment_services:
-        service_name = payment_services[application.service_id].name
-    email_data = {
-        "application_id": application_id,
-        "service_name": service_name,
-        "amount": application.amount,
-        "recipient": application.email
-    }            
+    service_name = payment_services[application.service_id].name
     
-    success = send_email("application/created", email_data)
+    # Send email notification
+    success = send_application_created_email(
+        application_id=application_id,
+        email=application.email,
+        service_name=service_name,
+        amount=application.amount
+    )
+    
     if not success:
         logger.warning("Failed to send email notification", {"application_id": application_id, "email": application.email})
     
@@ -331,7 +504,7 @@ async def apply_payment(application: PaymentApplication) -> PaymentApplicationRe
         application_id=application_id,
         status="pending",
         created_at=payment_applications[application_id]["created_at"].isoformat()
-    )
+        )
 
 @app.get("/payments/applications/{application_id}")
 async def get_application_info(application_id: str) -> PaymentApplicationResponse:
@@ -340,7 +513,7 @@ async def get_application_info(application_id: str) -> PaymentApplicationRespons
     if application_id not in payment_applications:
         logger.warning(f"Application not found", {"application_id": application_id})
         raise HTTPException(status_code=404, detail="Application not found")
-    
+
     application = payment_applications[application_id]
     return {
         "application_id": application_id,
@@ -366,7 +539,7 @@ async def approve_application(application_id: str) -> dict:
         service_id=application["service_id"],
         amount=application["amount"],
         user_id=application["user_id"],
-        status="completed",
+        status="pending",  # Set status to pending
         created_at=datetime.now(),
         email=application["email"]
     )
@@ -376,20 +549,39 @@ async def approve_application(application_id: str) -> dict:
     service_name = "Unknown Service"
     if new_payment.service_id in payment_services:
         service_name = payment_services[new_payment.service_id].name
-    email_data = {
-        "application_id": application_id,
-        "service_name": service_name,
-        "amount": application['amount'],
-        "payment_id": payment_id,
-        "recipient": application["email"]
-    }            
     
-    success = send_email("application/approved", email_data)
+    # Send email notification
+    success = send_application_approved_email(
+        application_id=application_id,
+        email=application["email"],
+        service_name=service_name,
+        amount=application["amount"],
+        payment_id=payment_id
+    )
+    
     if not success:
         logger.warning("Failed to send application approved email", {"application_id": application_id, "email": application["email"]})
     
-    logger.info(f"Application approved and payment created", {"application_id": application_id, "payment_id": payment_id})
-    return {"message": "Application approved and payment created", "payment_id": payment_id}
+    # Send payment created email
+    due_date = new_payment.created_at + timedelta(days=30)
+    due_date_str = due_date.strftime("%Y-%m-%d")
+    
+    send_payment_created_email(
+        payment_id=payment_id,
+        email=application["email"],
+        service_name=service_name,
+        amount=application["amount"],
+        due_date=due_date_str
+    )
+    
+    logger.info(f"Application approved and payment created", 
+                {"application_id": application_id, "payment_id": payment_id, "status": "pending"})
+    
+    return {
+        "message": "Application approved and payment created",
+            "payment_id": payment_id,
+        "status": "pending"
+    }
 
 @app.put("/payments/applications/{application_id}/reject")
 async def reject_application(application_id: str, reason: str) -> MessageResponse:
@@ -398,7 +590,7 @@ async def reject_application(application_id: str, reason: str) -> MessageRespons
     if application_id not in payment_applications:
         logger.warning(f"Application not found", {"application_id": application_id})
         raise HTTPException(status_code=404, detail="Application not found")
-    
+
     application = payment_applications[application_id]
     application["status"] = "rejected"
 
@@ -406,15 +598,16 @@ async def reject_application(application_id: str, reason: str) -> MessageRespons
     service_name = "Unknown Service"
     if application["service_id"] in payment_services:
         service_name = payment_services[application["service_id"]].name
-    email_data = {
-        "application_id": application_id,
-        "service_name": service_name,
-        "amount": application['amount'],
-        "reason": reason,
-        "recipient": application["email"]
-    }            
+                
+    # Send email notification
+    success = send_application_rejected_email(
+        application_id=application_id,
+        email=application["email"],
+        service_name=service_name,
+        amount=application["amount"],
+        reason=reason
+        )
     
-    success = send_email("application/rejected", email_data)
     if not success:
         logger.warning("Failed to send application rejected email", {"application_id": application_id, "email": application["email"]})
     
@@ -437,20 +630,19 @@ async def delete_application(application_id: str) -> MessageResponse:
     if application["service_id"] in payment_services:
         service_name = payment_services[application["service_id"]].name
     
-    # Delete application
-    del payment_applications[application_id]
+    # Send email notification
+    success = send_application_deleted_email(
+        application_id=application_id,
+        email=application["email"],
+        service_name=service_name,
+        amount=application["amount"]
+    )
     
-    # Send deletion notification email
-    email_data = {
-        "application_id": application_id,
-        "service_name": service_name,
-        "amount": application['amount'],
-        "recipient": application["email"]
-    }            
-    
-    success = send_email("application/deleted", email_data)
     if not success:
         logger.warning("Failed to send application deleted email", {"application_id": application_id, "email": application["email"]})
+    
+    # Delete application
+    del payment_applications[application_id]
     
     logger.info(f"Payment application successfully deleted", {"application_id": application_id})
     return {"message": "Payment application successfully deleted"}
@@ -495,7 +687,7 @@ async def download_payment(payment_id: str) -> FileResponse:
             # Write header row
             writer.writerow([
                 "Payment ID", "Service ID", "Service Name", "Amount",
-                    "User ID", "Status", "Created At"
+                "User ID", "Status", "Created At"
             ])
             
             # Write data row
@@ -524,3 +716,55 @@ async def download_payment(payment_id: str) -> FileResponse:
             "file_path": file_path
         })
         raise HTTPException(status_code=500, detail="Failed to generate payment CSV")
+
+@app.get("/export/payments")
+async def export_payments():
+    """Export all payments to CSV file"""
+    logger.info("Exporting all payments to CSV")
+    
+    # Create CSV file
+    CSV_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'csv_exports')
+    os.makedirs(CSV_DIR, exist_ok=True)
+    
+    # Create date-based filename
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    file_path = os.path.join(CSV_DIR, f"all_payments_{timestamp}.csv")
+    
+    try:
+        with open(file_path, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            
+            # Write header row
+            writer.writerow([
+                "Payment ID", "Service ID", "Service Name", "Amount",
+                "User ID", "Status", "Created At", "Email"
+            ])
+            
+            # Write data rows
+            for payment in payments.values():
+                service_name = "Unknown Service"
+                if payment.service_id in payment_services:
+                    service_name = payment_services[payment.service_id].name
+                
+                writer.writerow([
+                    payment.payment_id,
+                    payment.service_id,
+                    service_name,
+                    payment.amount,
+                    payment.user_id,
+                    payment.status,
+                    payment.created_at.isoformat(),
+                    payment.email
+                ])
+        
+        logger.info(f"All payments exported successfully", {"file_path": file_path})
+        
+        # Return file download response
+        return FileResponse(
+            path=file_path,
+            filename=f"all_payments_{timestamp}.csv",
+            media_type="text/csv"
+        )
+    except Exception as e:
+        logger.error(f"Failed to export payments", {"error": str(e)})
+        raise HTTPException(status_code=500, detail="Failed to export payments")

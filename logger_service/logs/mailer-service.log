@@ -3,3 +3,69 @@
 2025-05-09 01:32:38,466 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
 2025-05-09 01:32:42,181 - INFO - Email sent successfully to user@example.com
 2025-05-09 01:32:42,186 - INFO - Payment created email sent successfully for ID: 83904cba-522a-4d72-b1c8-df9febf99ac5
+2025-05-10 16:55:17,930 - INFO - Sending custom email from string to ['string']
+2025-05-10 16:55:17,930 - INFO - Sending custom email from string to ['string']
+2025-05-10 16:55:17,930 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 16:55:17,930 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 16:55:26,611 - INFO - Email sent successfully to ['string']
+2025-05-10 16:55:26,611 - INFO - Email sent successfully to ['string']
+2025-05-10 16:55:26,616 - INFO - Email sent successfully from string to ['string']
+2025-05-10 16:55:26,616 - INFO - Email sent successfully from string to ['string']
+2025-05-10 16:55:41,544 - INFO - Sending template email string from string to ['string']
+2025-05-10 16:55:41,544 - INFO - Sending template email string from string to ['string']
+2025-05-10 16:55:41,549 - ERROR - Error rendering template string: 'string.html' not found in search path: '/mnt/c/Users/lotus/classroom-payment-service/mailer_service/templates'
+2025-05-10 16:55:41,549 - ERROR - Error rendering template string: 'string.html' not found in search path: '/mnt/c/Users/lotus/classroom-payment-service/mailer_service/templates'
+2025-05-10 16:55:41,553 - ERROR - Error processing template email: Template rendering error: 'string.html' not found in search path: '/mnt/c/Users/lotus/classroom-payment-service/mailer_service/templates'
+2025-05-10 16:55:41,553 - ERROR - Error processing template email: Template rendering error: 'string.html' not found in search path: '/mnt/c/Users/lotus/classroom-payment-service/mailer_service/templates'
+2025-05-10 17:14:32,716 - INFO - Sending template email application_created from payment-service to ['user@example.com']
+2025-05-10 17:14:32,759 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 17:14:41,225 - INFO - Email sent successfully to ['user@example.com']
+2025-05-10 17:14:41,230 - INFO - Template email sent successfully from payment-service to ['user@example.com']
+2025-05-10 17:26:47,048 - INFO - Sending template email application_created from payment-service to ['user@example.com']
+2025-05-10 17:26:47,072 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 17:26:55,425 - INFO - Email sent successfully to ['user@example.com']
+2025-05-10 17:26:55,434 - INFO - Template email sent successfully from payment-service to ['user@example.com']
+2025-05-10 17:27:28,901 - INFO - Sending template email application_approved from payment-service to ['user@example.com']
+2025-05-10 17:27:28,932 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 17:27:32,325 - INFO - Email sent successfully to ['user@example.com']
+2025-05-10 17:27:32,328 - INFO - Template email sent successfully from payment-service to ['user@example.com']
+2025-05-10 17:28:54,531 - INFO - Sending template email payment_created from payment-service to ['user@example.com']
+2025-05-10 17:28:54,561 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 17:28:58,065 - INFO - Email sent successfully to ['user@example.com']
+2025-05-10 17:28:58,074 - INFO - Template email sent successfully from payment-service to ['user@example.com']
+2025-05-10 17:40:36,205 - INFO - Sending template email application_created from payment-service to ['huhu@example.com']
+2025-05-10 17:40:36,229 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 17:40:39,729 - INFO - Email sent successfully to ['huhu@example.com']
+2025-05-10 17:40:39,734 - INFO - Template email sent successfully from payment-service to ['huhu@example.com']
+2025-05-10 17:41:22,799 - INFO - Sending template email application_approved from payment-service to ['huhu@example.com']
+2025-05-10 17:41:22,813 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 17:41:26,160 - INFO - Email sent successfully to ['huhu@example.com']
+2025-05-10 17:41:26,170 - INFO - Template email sent successfully from payment-service to ['huhu@example.com']
+2025-05-10 17:41:26,187 - INFO - Sending template email payment_created from payment-service to ['huhu@example.com']
+2025-05-10 17:41:26,197 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 17:41:29,663 - INFO - Email sent successfully to ['huhu@example.com']
+2025-05-10 17:41:29,670 - INFO - Template email sent successfully from payment-service to ['huhu@example.com']
+2025-05-10 17:48:47,103 - INFO - Sending template email payment_success from payment-service to ['huhu@example.com']
+2025-05-10 17:48:47,148 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 17:48:50,649 - INFO - Email sent successfully to ['huhu@example.com']
+2025-05-10 17:48:50,664 - INFO - Template email sent successfully from payment-service to ['huhu@example.com']
+2025-05-10 17:49:00,317 - INFO - Sending template email payment_failed from payment-service to ['huhu@example.com']
+2025-05-10 17:49:00,347 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 17:49:03,761 - INFO - Email sent successfully to ['huhu@example.com']
+2025-05-10 17:49:03,768 - INFO - Template email sent successfully from payment-service to ['huhu@example.com']
+2025-05-10 17:50:03,684 - INFO - Sending template email application_deleted from payment-service to ['huhu@example.com']
+2025-05-10 17:50:03,712 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 17:50:07,171 - INFO - Email sent successfully to ['huhu@example.com']
+2025-05-10 17:50:07,181 - INFO - Template email sent successfully from payment-service to ['huhu@example.com']
+2025-05-10 17:50:46,914 - INFO - Sending template email payment_created from payment-service to ['user@example.com']
+2025-05-10 17:50:46,927 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 17:50:50,400 - INFO - Email sent successfully to ['user@example.com']
+2025-05-10 17:50:50,407 - INFO - Template email sent successfully from payment-service to ['user@example.com']
+2025-05-10 17:51:41,026 - INFO - Sending template email payment_created from payment-service to ['user@example.com']
+2025-05-10 17:51:41,040 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 17:51:44,480 - INFO - Email sent successfully to ['user@example.com']
+2025-05-10 17:51:44,484 - INFO - Template email sent successfully from payment-service to ['user@example.com']
+2025-05-10 18:11:06,570 - INFO - Sending template email payment_created from payment-service to ['user@example.com']
+2025-05-10 18:11:06,593 - INFO - Connecting to SMTP server: sandbox.smtp.mailtrap.io:2525
+2025-05-10 18:11:10,126 - INFO - Email sent successfully to ['user@example.com']
+2025-05-10 18:11:10,210 - INFO - Template email sent successfully from payment-service to ['user@example.com']

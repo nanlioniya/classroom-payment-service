@@ -1,0 +1,18 @@
+
+                Payment Created
+                
+                Dear Customer,
+                
+                A payment has been created for your service.
+                
+                Payment ID: {{payment_id}}
+                Service: {{service_name}}
+                Amount: ${{amount}}
+                {% if due_date %}Due Date: {{due_date}}{% endif %}
+                
+                Please complete this payment at your earliest convenience.
+                
+                Thank you for using our services!
+                
+                This is an automated message. Please do not reply to this email.
+                

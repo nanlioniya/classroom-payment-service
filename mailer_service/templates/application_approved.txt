@@ -1,0 +1,18 @@
+
+                Application Approved
+                
+                Dear Customer,
+                
+                We're pleased to inform you that your application has been approved!
+                
+                Application ID: {{application_id}}
+                Service: {{service_name}}
+                Amount: ${{amount}}
+                Payment ID: {{payment_id}}
+                
+                You can now proceed with the payment using the payment ID provided.
+                
+                Thank you for choosing our services!
+                
+                This is an automated message. Please do not reply to this email.
+                

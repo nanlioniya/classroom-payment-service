@@ -1,0 +1,16 @@
+
+                Payment Failed
+                
+                Dear Customer,
+                
+                We regret to inform you that your payment could not be processed successfully.
+                
+                Payment ID: {{payment_id}}
+                Service: {{service_name}}
+                Amount: ${{amount}}
+                Reason: {{reason}}
+                
+                Please try again or contact our support team for assistance.
+                
+                This is an automated message. Please do not reply to this email.
+                

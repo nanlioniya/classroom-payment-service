@@ -1,0 +1,15 @@
+
+                Application Deleted
+                
+                Dear Customer,
+                
+                Your application has been deleted as requested.
+                
+                Application ID: {{application_id}}
+                Service: {{service_name}}
+                Amount: ${{amount}}
+                
+                If you did not request this action or have any questions, please contact our support team.
+                
+                This is an automated message. Please do not reply to this email.
+                

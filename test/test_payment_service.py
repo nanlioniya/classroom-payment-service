@@ -4,10 +4,19 @@ from fastapi.testclient import TestClient
 from payment_service.main import app
 import os
 import uuid
-from logger_service.main import get_logger, log_info
-import logging
+from unittest.mock import patch
 
 client = TestClient(app)
+
+# Mock the email sending and logging functions
+@pytest.fixture(autouse=True)
+def mock_external_services():
+    with patch('payment_service.main.mailer.send_template_email', return_value=True), \
+         patch('payment_service.main.logger.info'), \
+         patch('payment_service.main.logger.warning'), \
+         patch('payment_service.main.logger.error'), \
+         patch('payment_service.main.logger.debug'):
+        yield
 
 def test_payment_service_list():
     """Test retrieving all available payment services"""
@@ -86,6 +95,7 @@ def test_delete_payment_service():
     
 def test_create_payment():
     """Test creating a new payment order"""
+    # First create a service
     service_data = {
         "service_id": "classroom_standard",
         "name": "Standard Classroom Plan",
@@ -94,11 +104,11 @@ def test_create_payment():
     }
     client.post("/payments/services", json=service_data)
 
+    # Then create a payment
     payment_data = {
         "service_id": "classroom_standard",
         "amount": 100,
         "user_id": "test_user",
-        "order_id": "test_order_123",
         "email": "test_create_payment@example.com"
     }
     response = client.post("/payments/create", json=payment_data)
@@ -107,12 +117,21 @@ def test_create_payment():
 
 def test_get_payment_info():
     """Test querying payment status"""
-    # First create a payment order
+    # First create a service
+    service_data = {
+        "service_id": "test_service_info",
+        "name": "Test Service Info",
+        "description": "Service for payment info test",
+        "base_price": 150.0
+    }
+    client.post("/payments/services", json=service_data)
+    
+    # Then create a payment order
     payment_data = {
-        "service_id": "test_service",
+        "service_id": "test_service_info",
         "amount": 150.0,
         "user_id": "test_user_456",
-        "order_id": "test_order_456"
+        "email": "test_payment_info@example.com"
     }
     create_response = client.post("/payments/create", json=payment_data)
     assert create_response.status_code == 200
@@ -125,45 +144,64 @@ def test_get_payment_info():
     assert response.status_code == 200
     assert response.json()["amount"] == 150.0
     assert response.json()["status"] == "pending"
-
+    
 def test_update_payment_status():
     """Test updating payment order status"""
-    # First create a payment order
+    # First create a service
+    service_data = {
+        "service_id": "test_service_update",
+        "name": "Test Service Update",
+        "description": "Service for payment update test",
+        "base_price": 100.0
+    }
+    client.post("/payments/services", json=service_data)
+    
+    # Then create a payment order
     payment_data = {
-        "service_id": "test_service",
+        "service_id": "test_service_update",
         "amount": 100,
         "user_id": "test_user",
-        "order_id": "test_order"
+        "email": "test_update_status@example.com"
     }
     create_response = client.post("/payments/create", json=payment_data)
+    assert create_response.status_code == 200
     payment_id = create_response.json()["payment_id"]
     
     # Update payment status
     update_data = {
-        "status": "completed"
+        "status": "paid"
     }
     response = client.put(f"/payments/{payment_id}", json=update_data)
     assert response.status_code == 200
-    assert response.json()["status"] == "completed"
-
+    assert response.json()["status"] == "paid"
+    
     # Test updating a non-existent payment order
     update_data = {
-        "status": "completed"
+        "status": "paid"
     }
     response = client.put("/payments/non_existent_id", json=update_data)
     assert response.status_code == 404
 
-
 def test_delete_payment():
     """Test deleting a payment order"""
-    # First create a payment order
+    # First create a service
+    service_data = {
+        "service_id": "test_service_delete",
+        "name": "Test Service Delete",
+        "description": "Service for payment deletion test",
+        "base_price": 100.0
+    }
+    client.post("/payments/services", json=service_data)
+    
+    # Then create a payment order
     payment_data = {
-        "service_id": "test_service",
-        "amount": 100,
-        "user_id": "test_user",
-        "order_id": "test_order"
+    "service_id": "test_service_delete",
+    "amount": 100,
+    "user_id": "test_user",
+    "email": "test_delete@example.com"
     }
     create_response = client.post("/payments/create", json=payment_data)
+    assert create_response.status_code == 200
     payment_id = create_response.json()["payment_id"]
     
     # Delete the payment order
@@ -179,9 +217,8 @@ def test_delete_payment():
     response = client.delete("/payments/non_existent_id")
     assert response.status_code == 404
 
-
-def test_apply_payment():
-    """Test applying for payment"""
+def create_test_application():
+    """Helper function to create a test payment application and return its ID"""
     # Create a service
     service_data = {
         "service_id": "TEST008",
@@ -196,18 +233,24 @@ def test_apply_payment():
         "user_id": "user202",
         "service_id": "TEST008",
         "amount": 450.0,
-        "reason": "Testing payment application"
+        "reason": "Testing payment application",
+        "email": "test_apply@example.com"
     }
     response = client.post("/payments/apply", json=application_data)
     assert response.status_code == 200
     assert "application_id" in response.json()
     assert response.json()["status"] == "pending"
     
+    # Return application_id for other tests to use
     return response.json()["application_id"]
+
+def test_apply_payment():
+    """Test applying for payment"""
+    create_test_application()
 
 def test_get_application_info():
     """Test getting application info"""
-    application_id = test_apply_payment()
+    application_id = create_test_application()
     
     # Get application status
     response = client.get(f"/payments/applications/{application_id}")
@@ -217,7 +260,7 @@ def test_get_application_info():
 
 def test_approve_application():
     """Test approving payment application"""
-    application_id = test_apply_payment()
+    application_id = create_test_application()
     
     # Approve application
     response = client.put(f"/payments/applications/{application_id}/approve")
@@ -231,10 +274,11 @@ def test_approve_application():
 
 def test_reject_application():
     """Test rejecting payment application"""
-    application_id = test_apply_payment()
+    application_id = create_test_application()
     
-    # Reject application
-    response = client.put(f"/payments/applications/{application_id}/reject")
+    # Reject application with reason parameter
+    reason = "Insufficient information provided"
+    response = client.put(f"/payments/applications/{application_id}/reject?reason={reason}")
     assert response.status_code == 200
     assert response.json()["message"] == "Application rejected"
     
@@ -257,10 +301,11 @@ def test_download_payment():
         "service_id": "TEST009",
         "amount": 500.0,
         "user_id": "user303",
-        "order_id": "order303"
+        "email": "test_download@example.com"
     }
    
     create_response = client.post("/payments/create", json=payment_data)
+    assert create_response.status_code == 200
     payment_id = create_response.json()["payment_id"]
     
     response = client.get(f"/payments/{payment_id}/download")
@@ -271,3 +316,101 @@ def test_download_payment():
     content = response.content.decode("utf-8")
     assert "Payment ID" in content
     assert "TEST009" in content
+
+def test_process_payment():
+    """Test processing a payment"""
+    # Create a service
+    service_data = {
+        "service_id": "test_process",
+        "name": "Test Process Service",
+        "description": "Service for payment processing test",
+        "base_price": 200.0
+    }
+    client.post("/payments/services", json=service_data)
+    
+    # Create a payment
+    payment_data = {
+        "service_id": "test_process",
+        "amount": 200.0,
+        "user_id": "user_process",
+        "email": "test_process@example.com"
+    }
+    create_response = client.post("/payments/create", json=payment_data)
+    assert create_response.status_code == 200
+    payment_id = create_response.json()["payment_id"]
+    
+    # Process the payment
+    process_data = {
+        "transaction_id": "trans_123456"
+    }
+    response = client.post(f"/payments/{payment_id}/process", json=process_data)
+    assert response.status_code == 200
+    assert response.json()["status"] == "paid"
+    
+    # Verify payment status
+    status_response = client.get(f"/payments/{payment_id}/info")
+    assert status_response.json()["status"] == "paid"
+
+def test_fail_payment():
+    """Test failing a payment"""
+    # Create a service
+    service_data = {
+        "service_id": "test_fail",
+        "name": "Test Fail Service",
+        "description": "Service for payment failure test",
+        "base_price": 150.0
+    }
+    client.post("/payments/services", json=service_data)
+    
+    # Create a payment
+    payment_data = {
+        "service_id": "test_fail",
+        "amount": 150.0,
+        "user_id": "user_fail",
+        "email": "test_fail@example.com"
+    }
+    create_response = client.post("/payments/create", json=payment_data)
+    assert create_response.status_code == 200
+    payment_id = create_response.json()["payment_id"]
+    
+    # Fail the payment
+    response = client.post(f"/payments/{payment_id}/fail")
+    assert response.status_code == 200
+    assert response.json()["status"] == "failed"
+    
+    # Verify payment status
+    status_response = client.get(f"/payments/{payment_id}/info")
+    assert status_response.json()["status"] == "failed"
+
+def test_export_payments():
+    """Test exporting all payments"""
+    # Create a few payments first with their services
+    for i in range(3):
+        # Create service
+        service_data = {
+            "service_id": f"test_export_{i}",
+            "name": f"Test Export Service {i}",
+            "description": f"Service for export test {i}",
+            "base_price": 100.0 + i * 50
+        }
+        client.post("/payments/services", json=service_data)
+        
+        # Create payment
+        payment_data = {
+            "service_id": f"test_export_{i}",
+            "amount": 100.0 + i * 50,
+            "user_id": f"user_export_{i}",
+            "email": f"test_export_{i}@example.com"
+        }
+        client.post("/payments/create", json=payment_data)
+    
+    # Export all payments
+    response = client.get("/export/payments")
+    assert response.status_code == 200
+    assert "text/csv" in response.headers["content-type"]
+    assert "all_payments_" in response.headers["content-disposition"]
+    
+    content = response.content.decode("utf-8")
+    assert "Payment ID" in content
+    assert "Service ID" in content
+    assert "Email" in content

@@ -131,3 +131,109 @@
 2025-05-09 01:32:38,448 - DEBUG - JSON data: {"recipient": "user@example.com", "payment_id": "83904cba-522a-4d72-b1c8-df9febf99ac5", "service_name": "string", "amount": 0.0, "due_date": "2025-06-08"} - Details: {"json_data": "{\"recipient\": \"user@example.com\", \"payment_id\": \"83904cba-522a-4d72-b1c8-df9febf99ac5\", \"service_name\": \"string\", \"amount\": 0.0, \"due_date\": \"2025-06-08\"}"}
 2025-05-09 01:32:42,194 - DEBUG - Email response - Details: {"status_code": 200, "content": "{\"status\":\"success\",\"message\":\"Payment creation email sent\"}"}
 2025-05-09 01:32:42,199 - INFO - Payment created for user string - Details: {"payment_id": "83904cba-522a-4d72-b1c8-df9febf99ac5", "amount": 0.0, "service_id": "string"}
+2025-05-10 17:14:15,533 - INFO - Adding new payment service - Details: {"service_id": "string", "name": "string"}
+2025-05-10 17:14:15,533 - INFO - Adding new payment service - Details: {"service_id": "string", "name": "string"}
+2025-05-10 17:14:15,533 - INFO - Payment service added successfully - Details: {"service_id": "string"}
+2025-05-10 17:14:15,533 - INFO - Payment service added successfully - Details: {"service_id": "string"}
+2025-05-10 17:14:32,616 - INFO - Received payment application - Details: {"user_id": "string", "service_id": "string"}
+2025-05-10 17:14:32,616 - INFO - Received payment application - Details: {"user_id": "string", "service_id": "string"}
+2025-05-10 17:14:32,620 - DEBUG - Available services - Details: {"services": ["string"]}
+2025-05-10 17:14:32,620 - DEBUG - Available services - Details: {"services": ["string"]}
+2025-05-10 17:14:41,243 - INFO - Application created email sent to user@example.com
+2025-05-10 17:14:41,243 - INFO - Application created email sent to user@example.com
+2025-05-10 17:14:41,249 - INFO - Payment application created - Details: {"application_id": "d0268965-23c5-461d-a657-68cc190a97fa", "status": "pending"}
+2025-05-10 17:14:41,249 - INFO - Payment application created - Details: {"application_id": "d0268965-23c5-461d-a657-68cc190a97fa", "status": "pending"}
+2025-05-10 17:21:39,138 - INFO - Approving payment application - Details: {"application_id": "d0268965-23c5-461d-a657-68cc190a97fa"}
+2025-05-10 17:21:39,138 - INFO - Approving payment application - Details: {"application_id": "d0268965-23c5-461d-a657-68cc190a97fa"}
+2025-05-10 17:21:39,142 - WARNING - Application not found - Details: {"application_id": "d0268965-23c5-461d-a657-68cc190a97fa"}
+2025-05-10 17:21:39,142 - WARNING - Application not found - Details: {"application_id": "d0268965-23c5-461d-a657-68cc190a97fa"}
+2025-05-10 17:25:26,538 - INFO - Received payment application - Details: {"user_id": "string", "service_id": "string"}
+2025-05-10 17:25:26,538 - INFO - Received payment application - Details: {"user_id": "string", "service_id": "string"}
+2025-05-10 17:25:26,542 - DEBUG - Available services - Details: {"services": []}
+2025-05-10 17:25:26,542 - DEBUG - Available services - Details: {"services": []}
+2025-05-10 17:25:26,547 - WARNING - Payment service not found - Details: {"service_id": "string"}
+2025-05-10 17:25:26,547 - WARNING - Payment service not found - Details: {"service_id": "string"}
+2025-05-10 17:25:31,664 - INFO - Received payment application - Details: {"user_id": "string", "service_id": "string"}
+2025-05-10 17:25:31,664 - INFO - Received payment application - Details: {"user_id": "string", "service_id": "string"}
+2025-05-10 17:25:31,670 - DEBUG - Available services - Details: {"services": []}
+2025-05-10 17:25:31,670 - DEBUG - Available services - Details: {"services": []}
+2025-05-10 17:25:31,675 - WARNING - Payment service not found - Details: {"service_id": "string"}
+2025-05-10 17:25:31,675 - WARNING - Payment service not found - Details: {"service_id": "string"}
+2025-05-10 17:25:58,317 - INFO - Adding new payment service - Details: {"service_id": "string", "name": "string"}
+2025-05-10 17:25:58,317 - INFO - Adding new payment service - Details: {"service_id": "string", "name": "string"}
+2025-05-10 17:25:58,322 - INFO - Payment service added successfully - Details: {"service_id": "string"}
+2025-05-10 17:25:58,322 - INFO - Payment service added successfully - Details: {"service_id": "string"}
+2025-05-10 17:26:00,028 - INFO - Adding new payment service - Details: {"service_id": "string", "name": "string"}
+2025-05-10 17:26:00,028 - INFO - Adding new payment service - Details: {"service_id": "string", "name": "string"}
+2025-05-10 17:26:00,033 - WARNING - Service ID already exists - Details: {"service_id": "string"}
+2025-05-10 17:26:00,033 - WARNING - Service ID already exists - Details: {"service_id": "string"}
+2025-05-10 17:26:34,508 - INFO - Adding new payment service - Details: {"service_id": "string", "name": "string"}
+2025-05-10 17:26:34,509 - INFO - Payment service added successfully - Details: {"service_id": "string"}
+2025-05-10 17:26:47,021 - INFO - Received payment application - Details: {"user_id": "string", "service_id": "string"}
+2025-05-10 17:26:47,025 - DEBUG - Available services - Details: {"services": ["string"]}
+2025-05-10 17:26:55,443 - INFO - Application created email sent to user@example.com
+2025-05-10 17:26:55,448 - INFO - Payment application created - Details: {"application_id": "b825d5a4-0b35-4da8-ab9b-bd23eee60a9a", "status": "pending"}
+2025-05-10 17:27:28,885 - INFO - Approving payment application - Details: {"application_id": "b825d5a4-0b35-4da8-ab9b-bd23eee60a9a"}
+2025-05-10 17:27:32,335 - INFO - Application approved email sent to user@example.com
+2025-05-10 17:27:32,339 - INFO - Application approved and payment created - Details: {"application_id": "b825d5a4-0b35-4da8-ab9b-bd23eee60a9a", "payment_id": "dcb222f2-4d88-4d87-8d62-e7e30ac2b2fc"}
+2025-05-10 17:28:54,517 - INFO - Creating new payment - Details: {"payment_id": "6eaafa68-0778-4fd4-b4b0-806bf118f53f", "user_id": "string"}
+2025-05-10 17:28:58,084 - INFO - Payment created email sent to user@example.com
+2025-05-10 17:28:58,089 - INFO - Payment created for user string - Details: {"payment_id": "6eaafa68-0778-4fd4-b4b0-806bf118f53f", "amount": 0.0, "service_id": "string"}
+2025-05-10 17:38:52,913 - INFO - Adding new payment service - Details: {"service_id": "s1", "name": "s1"}
+2025-05-10 17:38:52,917 - INFO - Payment service added successfully - Details: {"service_id": "s1"}
+2025-05-10 17:39:00,006 - INFO - Listing all payment services
+2025-05-10 17:39:16,879 - INFO - Getting payment service details - Details: {"service_id": "s1"}
+2025-05-10 17:39:16,884 - DEBUG - Payment service found - Details: {"service_id": "s1", "service_name": "s1"}
+2025-05-10 17:39:41,235 - INFO - Updating payment service - Details: {"service_id": "s1"}
+2025-05-10 17:39:41,241 - INFO - Payment service updated successfully - Details: {"service_id": "s1", "updated_fields": ["name", "description", "base_price"]}
+2025-05-10 17:39:45,982 - INFO - Getting payment service details - Details: {"service_id": "s1"}
+2025-05-10 17:39:45,987 - DEBUG - Payment service found - Details: {"service_id": "s1", "service_name": "s1"}
+2025-05-10 17:40:03,282 - INFO - Creating new payment - Details: {"payment_id": "daf82c72-5d2a-4993-aaae-a6c3b4c6d133", "user_id": "string"}
+2025-05-10 17:40:03,285 - WARNING - Service not found for payment - Details: {"payment_id": "daf82c72-5d2a-4993-aaae-a6c3b4c6d133", "service_id": "string"}
+2025-05-10 17:40:03,289 - ERROR - Failed to create payment: 404: Service not found - Details: {"user_id": "string", "service_id": "string", "error": "404: Service not found"}
+2025-05-10 17:40:36,121 - INFO - Received payment application - Details: {"user_id": "u1", "service_id": "s1"}
+2025-05-10 17:40:36,124 - DEBUG - Available services - Details: {"services": ["s1"]}
+2025-05-10 17:40:39,751 - INFO - Application created email sent to huhu@example.com
+2025-05-10 17:40:39,757 - INFO - Payment application created - Details: {"application_id": "1ebc9b14-c8d6-44ab-bce6-40344305fc86", "status": "pending"}
+2025-05-10 17:41:08,931 - INFO - Getting application info - Details: {"application_id": "1ebc9b14-c8d6-44ab-bce6-40344305fc86"}
+2025-05-10 17:41:22,779 - INFO - Approving payment application - Details: {"application_id": "1ebc9b14-c8d6-44ab-bce6-40344305fc86"}
+2025-05-10 17:41:26,178 - INFO - Application approved email sent to huhu@example.com
+2025-05-10 17:41:29,678 - INFO - Payment created email sent to huhu@example.com
+2025-05-10 17:41:29,683 - INFO - Application approved and payment created - Details: {"application_id": "1ebc9b14-c8d6-44ab-bce6-40344305fc86", "payment_id": "67dfa905-c429-4fa7-96df-7c81adbbc97a", "status": "pending"}
+2025-05-10 17:43:15,265 - INFO - Getting payment info - Details: {"payment_id": "67dfa905-c429-4fa7-96df-7c81adbbc97a"}
+2025-05-10 17:48:47,081 - INFO - Updating payment status - Details: {"payment_id": "67dfa905-c429-4fa7-96df-7c81adbbc97a", "new_status": "paid"}
+2025-05-10 17:48:47,085 - INFO - Payment marked as paid - Details: {"payment_id": "67dfa905-c429-4fa7-96df-7c81adbbc97a"}
+2025-05-10 17:48:50,675 - INFO - Payment success email sent to huhu@example.com
+2025-05-10 17:49:00,299 - INFO - Updating payment status - Details: {"payment_id": "67dfa905-c429-4fa7-96df-7c81adbbc97a", "new_status": "failed"}
+2025-05-10 17:49:00,304 - INFO - Payment marked as failed - Details: {"payment_id": "67dfa905-c429-4fa7-96df-7c81adbbc97a"}
+2025-05-10 17:49:03,780 - INFO - Payment failed email sent to huhu@example.com
+2025-05-10 17:49:27,425 - INFO - Deleting payment - Details: {"payment_id": "67dfa905-c429-4fa7-96df-7c81adbbc97a"}
+2025-05-10 17:49:27,429 - INFO - Payment deleted successfully - Details: {"payment_id": "67dfa905-c429-4fa7-96df-7c81adbbc97a"}
+2025-05-10 17:49:29,980 - INFO - Deleting payment - Details: {"payment_id": "67dfa905-c429-4fa7-96df-7c81adbbc97a"}
+2025-05-10 17:49:29,984 - WARNING - Payment not found - Details: {"payment_id": "67dfa905-c429-4fa7-96df-7c81adbbc97a"}
+2025-05-10 17:50:03,671 - INFO - Deleting payment application - Details: {"application_id": "1ebc9b14-c8d6-44ab-bce6-40344305fc86"}
+2025-05-10 17:50:07,190 - INFO - Application deleted email sent to huhu@example.com
+2025-05-10 17:50:07,195 - INFO - Payment application successfully deleted - Details: {"application_id": "1ebc9b14-c8d6-44ab-bce6-40344305fc86"}
+2025-05-10 17:50:32,484 - INFO - Creating new payment - Details: {"payment_id": "5ff9728e-8255-4949-991d-59afa5dc136c", "user_id": "string"}
+2025-05-10 17:50:32,489 - WARNING - Service not found for payment - Details: {"payment_id": "5ff9728e-8255-4949-991d-59afa5dc136c", "service_id": "string"}
+2025-05-10 17:50:32,493 - ERROR - Failed to create payment: 404: Service not found - Details: {"user_id": "string", "service_id": "string", "error": "404: Service not found"}
+2025-05-10 17:50:46,870 - INFO - Creating new payment - Details: {"payment_id": "adba2d5f-922a-49c2-9dab-4bd134a41878", "user_id": "string"}
+2025-05-10 17:50:50,416 - INFO - Payment created email sent to user@example.com
+2025-05-10 17:50:50,422 - INFO - Payment created for user string - Details: {"payment_id": "adba2d5f-922a-49c2-9dab-4bd134a41878", "amount": 0.0, "service_id": "s1"}
+2025-05-10 17:51:21,472 - INFO - Downloading payment information - Details: {"payment_id": "adba2d5f-922a-49c2-9dab-4bd134a41878"}
+2025-05-10 17:51:21,486 - DEBUG - Creating CSV file - Details: {"file_path": "/mnt/c/Users/lotus/classroom-payment-service/csv_exports/2025-05-10/payment_adba2d5f-922a-49c2-9dab-4bd134a41878.csv"}
+2025-05-10 17:51:21,494 - INFO - CSV file created successfully - Details: {"payment_id": "adba2d5f-922a-49c2-9dab-4bd134a41878", "file_path": "/mnt/c/Users/lotus/classroom-payment-service/csv_exports/2025-05-10/payment_adba2d5f-922a-49c2-9dab-4bd134a41878.csv"}
+2025-05-10 17:51:41,012 - INFO - Creating new payment - Details: {"payment_id": "095aabf0-d166-4287-a74b-2b46a62444c0", "user_id": "string"}
+2025-05-10 17:51:44,491 - INFO - Payment created email sent to user@example.com
+2025-05-10 17:51:44,495 - INFO - Payment created for user string - Details: {"payment_id": "095aabf0-d166-4287-a74b-2b46a62444c0", "amount": 670.0, "service_id": "s1"}
+2025-05-10 17:51:48,773 - INFO - Exporting all payments to CSV
+2025-05-10 17:51:48,817 - INFO - All payments exported successfully - Details: {"file_path": "/mnt/c/Users/lotus/classroom-payment-service/csv_exports/all_payments_20250510_175148.csv"}
+2025-05-10 18:10:58,942 - INFO - Adding new payment service - Details: {"service_id": "s1", "name": "s1"}
+2025-05-10 18:10:58,959 - INFO - Payment service added successfully - Details: {"service_id": "s1"}
+2025-05-10 18:11:06,487 - INFO - Creating new payment - Details: {"payment_id": "afe6e4a3-e38c-4fb6-aefe-db6a68fdb71e", "user_id": "string"}
+2025-05-10 18:11:10,213 - INFO - Payment created email sent to user@example.com
+2025-05-10 18:11:10,216 - INFO - Payment created for user string - Details: {"payment_id": "afe6e4a3-e38c-4fb6-aefe-db6a68fdb71e", "amount": 670.0, "service_id": "s1"}
+2025-05-10 18:38:16,225 - INFO - Creating new payment - Details: {"payment_id": "724a7b88-c1b1-4b93-b4b5-187743a61b24", "user_id": "string"}
+2025-05-10 18:38:16,257 - ERROR - Failed to send payment created email: Error sending template email: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /send-template (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f27fe0c4310>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-05-10 18:38:16,263 - WARNING - Failed to send email notification - Details: {"payment_id": "724a7b88-c1b1-4b93-b4b5-187743a61b24", "email": "user@example.com"}
+2025-05-10 18:38:16,269 - INFO - Payment created for user string - Details: {"payment_id": "724a7b88-c1b1-4b93-b4b5-187743a61b24", "amount": 670.0, "service_id": "s1"}

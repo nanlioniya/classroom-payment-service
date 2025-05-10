@@ -1,0 +1,16 @@
+
+                Payment Successful
+                
+                Dear Customer,
+                
+                We're pleased to confirm that your payment has been successfully processed.
+                
+                Payment ID: {{payment_id}}
+                Service: {{service_name}}
+                Amount: ${{amount}}
+                {% if transaction_id %}Transaction ID: {{transaction_id}}{% endif %}
+                
+                Thank you for your payment!
+                
+                This is an automated message. Please do not reply to this email.
+                

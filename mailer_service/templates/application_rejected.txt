@@ -1,0 +1,16 @@
+
+                Application Rejected
+                
+                Dear Customer,
+                
+                We regret to inform you that your application has been rejected.
+                
+                Application ID: {{application_id}}
+                Service: {{service_name}}
+                Amount: ${{amount}}
+                Reason: {{reason}}
+                
+                If you have any questions or would like to submit a new application, please contact our support team.
+                
+                This is an automated message. Please do not reply to this email.
+                
